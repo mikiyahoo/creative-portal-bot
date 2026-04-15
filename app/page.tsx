@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
+import Image from "next/image";
 import { Loader2, ShieldCheck } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { useTelegram } from "@/hooks/useTelegram";
@@ -106,10 +107,17 @@ export default function Home() {
     <div className="h-screen bg-background overflow-hidden flex flex-col">
       <div className="flex-1 flex flex-col max-w-md mx-auto w-full px-4 py-6">
         <div className="text-center mb-6">
-          <div className="w-40 h-40 mx-auto rounded-3xl bg-obsidian border border-white/10 flex items-center justify-center mb-4 p-4">
-            <span className="text-4xl font-bold text-brand-yellow">CP</span>
+          <div className="w-48 h-16 mx-auto rounded-2xl bg-obsidian border border-white/10 flex items-center justify-center overflow-hidden">
+            <Image
+              src="/images/creative-portal-logo-white.png"
+              alt="Creative Portal"
+              width={180}
+              height={48}
+              unoptimized
+              className="w-full h-full object-contain"
+            />
           </div>
-          <p className="text-text-muted text-sm">
+          <p className="text-text-muted text-sm mt-3">
             {user ? `Welcome, ${user.first_name}!` : "Your creative journey starts here"}
           </p>
         </div>
