@@ -118,9 +118,12 @@ export default function Home() {
             />
           </div>
           <div className="text-left">
-            <h1 className="text-3xl font-extrabold text-text-primary">
-              Welcome, {user?.first_name || "!"}
+            <h1 className="text-lg font-light text-text-primary">
+              Welcome!
             </h1>
+            <p className="text-3xl font-extrabold text-brand-yellow mt-1">
+              {user?.first_name || "Creative"}
+            </p>
             <p className="text-text-muted text-sm mt-1">
               Your creative journey starts here
             </p>
