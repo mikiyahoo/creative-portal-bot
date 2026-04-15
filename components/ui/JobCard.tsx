@@ -17,6 +17,7 @@ interface Job {
   experience?: string;
   createdAt?: string;
   isPinned?: boolean;
+  featured?: boolean;
 }
 
 interface JobCardProps {
@@ -81,15 +82,24 @@ export function JobCard({ job, onApply }: JobCardProps) {
     return map[disc || ""] || disc || "General";
   };
 
+  const isFeatured = job.isPinned || job.featured;
+
   return (
-    <div className="bg-surface rounded-3xl p-6 border border-white/5 hover:border-brand-yellow/20 transition-all">
+    <div className={`
+      relative bg-obsidian rounded-3xl p-6 
+      border border-white/10 
+      shadow-[inset_0_1px_1px_rgba(255,184,0,0.05)]
+      hover:border-brand-yellow/30 hover:shadow-[0_0_20px_rgba(255,184,0,0.15)]
+      transition-all duration-300
+      ${isFeatured ? 'before:absolute before:left-0 before:top-0 before:bottom-0 before:w-1 before:bg-brand-yellow before:rounded-l-3xl' : ''}
+    `}>
       <div className="flex items-start justify-between mb-3">
         <h3 className="font-extrabold text-text-primary text-lg uppercase tracking-wide leading-tight">
           {job.title}
         </h3>
-        {job.isPinned && (
-          <span className="px-2 py-1 bg-brand-yellow/20 text-brand-yellow text-xs font-bold rounded-full">
-            Pinned
+        {isFeatured && (
+          <span className="px-2 py-1 bg-brand-yellow/10 text-brand-yellow text-xs font-bold rounded-full border border-brand-yellow/20">
+            Featured
           </span>
         )}
       </div>
@@ -112,25 +122,33 @@ export function JobCard({ job, onApply }: JobCardProps) {
         )}
       </div>
 
-      <div className="flex items-center gap-4 text-text-muted text-sm mb-4">
-        <div className="flex items-center gap-1">
-          <DollarSign className="w-4 h-4 text-brand-yellow" />
+      <div className="flex flex-wrap items-center gap-4 text-text-muted text-sm mb-4">
+        <div className="flex items-center gap-1.5">
+          <div className="p-1.5 rounded-full bg-brand-yellow/10">
+            <DollarSign className="w-3.5 h-3.5 text-brand-yellow" />
+          </div>
           <span className="font-bold text-brand-yellow">{job.budget}</span>
         </div>
         {job.location && (
-          <div className="flex items-center gap-1">
-            <MapPin className="w-4 h-4 text-brand-yellow" />
+          <div className="flex items-center gap-1.5">
+            <div className="p-1.5 rounded-full bg-brand-yellow/10">
+              <MapPin className="w-3.5 h-3.5 text-brand-yellow" />
+            </div>
             <span>{job.location}</span>
           </div>
         )}
         {job.experience && (
-          <div className="flex items-center gap-1">
-            <BarChart className="w-4 h-4 text-brand-yellow" />
+          <div className="flex items-center gap-1.5">
+            <div className="p-1.5 rounded-full bg-brand-yellow/10">
+              <BarChart className="w-3.5 h-3.5 text-brand-yellow" />
+            </div>
             <span>{job.experience}</span>
           </div>
         )}
-        <div className="flex items-center gap-1">
-          <Briefcase className="w-4 h-4 text-brand-yellow" />
+        <div className="flex items-center gap-1.5">
+          <div className="p-1.5 rounded-full bg-brand-yellow/10">
+            <Briefcase className="w-3.5 h-3.5 text-brand-yellow" />
+          </div>
           <span>{formatJobType(job.jobType)}</span>
         </div>
       </div>
@@ -140,7 +158,7 @@ export function JobCard({ job, onApply }: JobCardProps) {
       <div className="flex gap-3">
         <button
           onClick={handleViewDetails}
-          className="flex-1 py-3 border-2 border-brand-yellow text-brand-yellow rounded-2xl font-extrabold text-sm hover:bg-brand-yellow/10 transition-colors"
+          className="flex-1 py-3 border-2 border-brand-yellow/50 text-brand-yellow rounded-2xl font-extrabold text-sm hover:bg-brand-yellow/10 hover:border-brand-yellow transition-all"
         >
           View Details
         </button>

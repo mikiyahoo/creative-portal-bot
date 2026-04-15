@@ -22,6 +22,7 @@ interface Job {
   experience?: string;
   createdAt?: string;
   isPinned?: boolean;
+  featured?: boolean;
 }
 
 export default function JobsPage() {
@@ -140,7 +141,7 @@ export default function JobsPage() {
     return (
       <div className="min-h-screen bg-background p-6">
         <div className="max-w-md mx-auto">
-          <h1 className="text-xl font-extrabold text-text-primary uppercase mb-6">Browse Jobs</h1>
+          <h1 className="text-2xl font-extrabold text-text-primary uppercase mb-6 tracking-wide">Discover Jobs</h1>
           <JobFeedSkeleton />
         </div>
       </div>
@@ -150,21 +151,17 @@ export default function JobsPage() {
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-md mx-auto">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl font-extrabold text-text-primary uppercase">Browse Jobs</h1>
-          {refreshing && (
-            <RefreshCw className="w-5 h-5 text-brand-yellow animate-spin" />
-          )}
-        </div>
+        <h1 className="text-2xl font-extrabold text-text-primary uppercase mb-6 tracking-wide">Discover Jobs</h1>
 
-        <div className="flex gap-2 mb-4">
+        <div className="flex gap-3 mb-6">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-3 w-5 h-5 text-text-muted" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-brand-yellow" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 p-3 bg-surface border border-white/10 rounded-2xl text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-yellow placeholder:text-text-muted"
+              onFocus={() => tg?.HapticFeedback?.impactOccurred("light")}
+              className="w-full pl-12 pr-4 py-3.5 bg-white/5 rounded-full border border-white/5 text-text-primary focus:outline-none focus:border-brand-yellow focus:ring-1 focus:ring-brand-yellow placeholder:text-text-muted transition-all"
               placeholder="Search jobs..."
             />
           </div>
@@ -173,7 +170,7 @@ export default function JobsPage() {
               tg?.HapticFeedback?.impactOccurred("light");
               setShowFilters(true);
             }}
-            className="p-3 bg-surface border border-white/10 rounded-2xl hover:bg-surface-light transition-colors"
+            className="p-3.5 bg-white/5 rounded-full border border-white/5 hover:bg-white/10 hover:border-brand-yellow/30 transition-all"
           >
             <SlidersHorizontal className="w-5 h-5 text-brand-yellow" />
           </button>

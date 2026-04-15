@@ -86,12 +86,14 @@ export default function Home() {
   if (!isReady || checking || authenticating) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-background p-6">
-        <Loader2 className="w-10 h-10 text-brand-yellow animate-spin mb-4" />
-        <p className="text-text-primary font-medium">
+        <div className="w-16 h-16 rounded-full bg-brand-yellow/10 flex items-center justify-center mb-6">
+          <Loader2 className="w-8 h-8 text-brand-yellow animate-spin" />
+        </div>
+        <p className="text-text-primary font-bold text-lg">
           {authenticating ? "Authenticating with Telegram..." : "Loading..."}
         </p>
         {authenticating && (
-          <p className="text-text-muted text-sm mt-2 flex items-center gap-2">
+          <p className="text-text-muted text-sm mt-3 flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-brand-yellow" />
             Secure connection established
           </p>
@@ -103,14 +105,14 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-md mx-auto">
-        <div className="text-center mb-10">
-          <div className="inline-flex p-5 bg-surface rounded-3xl mb-5 border border-white/5">
-            <Palette className="w-12 h-12 text-brand-yellow" />
+        <div className="text-center mb-12 pt-6">
+          <div className="inline-flex p-6 bg-obsidian rounded-3xl mb-6 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,184,0,0.05)]">
+            <Palette className="w-14 h-14 text-brand-yellow" />
           </div>
-          <h1 className="text-3xl font-extrabold text-text-primary uppercase tracking-wide mb-2">
+          <h1 className="text-4xl font-extrabold text-text-primary uppercase tracking-widest mb-3">
             Creative Portal
           </h1>
-          <p className="text-text-muted">
+          <p className="text-text-muted text-lg">
             {user ? `Welcome back, ${user.first_name}!` : "Your creative journey starts here"}
           </p>
         </div>
@@ -118,9 +120,9 @@ export default function Home() {
         <div className="space-y-4">
           <button
             onClick={() => handleRoleSelect("seeker")}
-            className="w-full p-6 bg-surface rounded-3xl border border-white/5 flex items-center gap-4 transition-all active:scale-[0.98] hover:bg-surface-light"
+            className="w-full p-6 bg-obsidian rounded-3xl border border-white/10 flex items-center gap-5 transition-all active:scale-[0.98] hover:border-brand-yellow/30 hover:shadow-[0_0_20px_rgba(255,184,0,0.1)]"
           >
-            <div className="p-4 bg-brand-yellow rounded-2xl">
+            <div className="p-4 bg-brand-yellow rounded-2xl shadow-[0_0_15px_rgba(255,184,0,0.3)]">
               <Palette className="w-8 h-8 text-black" />
             </div>
             <div className="text-left">
@@ -133,9 +135,9 @@ export default function Home() {
 
           <button
             onClick={() => handleRoleSelect("employer")}
-            className="w-full p-6 bg-surface rounded-3xl border border-white/5 flex items-center gap-4 transition-all active:scale-[0.98] hover:bg-surface-light"
+            className="w-full p-6 bg-obsidian rounded-3xl border border-white/10 flex items-center gap-5 transition-all active:scale-[0.98] hover:border-brand-yellow/30 hover:shadow-[0_0_20px_rgba(255,184,0,0.1)]"
           >
-            <div className="p-4 bg-brand-yellow rounded-2xl">
+            <div className="p-4 bg-brand-yellow rounded-2xl shadow-[0_0_15px_rgba(255,184,0,0.3)]">
               <Briefcase className="w-8 h-8 text-black" />
             </div>
             <div className="text-left">
