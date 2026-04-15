@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
-import Image from "next/image";
 import { Loader2, ShieldCheck } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { useTelegram } from "@/hooks/useTelegram";
@@ -87,8 +86,8 @@ export default function Home() {
   if (!isReady || checking || authenticating) {
     return (
       <div className="h-screen flex flex-col items-center justify-center bg-background p-4">
-        <div className="w-12 h-12 rounded-full bg-brand-yellow/10 flex items-center justify-center mb-4">
-          <Loader2 className="w-6 h-6 text-brand-yellow animate-spin" />
+        <div className="w-14 h-14 rounded-full bg-brand-yellow/10 flex items-center justify-center mb-4">
+          <Loader2 className="w-7 h-7 text-brand-yellow animate-spin" />
         </div>
         <p className="text-text-primary font-bold text-base">
           {authenticating ? "Authenticating..." : "Loading..."}
@@ -104,56 +103,69 @@ export default function Home() {
   }
 
   return (
-    <div className="h-screen bg-background overflow-hidden">
-      <div className="h-full flex flex-col max-w-md mx-auto px-4 py-4">
-        <div className="text-center mb-4 pt-2">
-          <div className="relative w-32 h-32 mx-auto mb-2">
-            <Image
-              src="/images/creative-portal-logo-white.png"
-              alt="Creative Portal"
-              fill
-              className="object-contain"
-            />
+    <div className="h-screen bg-background overflow-hidden flex flex-col">
+      <div className="flex-1 flex flex-col max-w-md mx-auto w-full px-4 py-6">
+        <div className="text-center mb-6">
+          <div className="w-40 h-40 mx-auto rounded-3xl bg-obsidian border border-white/10 flex items-center justify-center mb-4 p-4">
+            <span className="text-4xl font-bold text-brand-yellow">CP</span>
           </div>
           <p className="text-text-muted text-sm">
             {user ? `Welcome, ${user.first_name}!` : "Your creative journey starts here"}
           </p>
         </div>
 
-        <div className="flex-1 flex flex-col gap-3 justify-center">
+        <div className="flex-1 flex flex-col gap-4 justify-center">
           <button
             onClick={() => handleRoleSelect("seeker")}
-            className="flex-1 bg-obsidian rounded-2xl border border-white/10 flex items-center gap-4 p-4 transition-all active:scale-[0.98] hover:border-brand-yellow/30"
+            className="group relative overflow-hidden bg-obsidian rounded-2xl border border-white/10 p-5 transition-all hover:border-brand-yellow/50 active:scale-[0.98]"
           >
-            <div className="p-3 bg-brand-yellow rounded-xl">
-              <svg className="w-6 h-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            <div className="absolute inset-0 bg-gradient-to-r from-brand-yellow/0 to-brand-yellow/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-brand-yellow flex items-center justify-center shadow-lg shadow-brand-yellow/30">
+                <svg className="w-7 h-7 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+              </div>
+              <div className="text-left flex-1">
+                <h2 className="text-lg font-bold text-text-primary">Creative</h2>
+                <p className="text-text-muted text-xs">
+                  Build portfolio & find jobs
+                </p>
+              </div>
+              <svg className="w-5 h-5 text-text-muted group-hover:text-brand-yellow transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
-            </div>
-            <div className="text-left">
-              <h2 className="text-base font-bold text-text-primary">I am a Creative</h2>
-              <p className="text-text-muted text-xs">
-                Build portfolio & find jobs
-              </p>
             </div>
           </button>
 
           <button
             onClick={() => handleRoleSelect("employer")}
-            className="flex-1 bg-obsidian rounded-2xl border border-white/10 flex items-center gap-4 p-4 transition-all active:scale-[0.98] hover:border-brand-yellow/30"
+            className="group relative overflow-hidden bg-obsidian rounded-2xl border border-white/10 p-5 transition-all hover:border-brand-yellow/50 active:scale-[0.98]"
           >
-            <div className="p-3 bg-brand-yellow rounded-xl">
-              <svg className="w-6 h-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            <div className="absolute inset-0 bg-gradient-to-r from-brand-yellow/0 to-brand-yellow/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-brand-yellow flex items-center justify-center shadow-lg shadow-brand-yellow/30">
+                <svg className="w-7 h-7 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div className="text-left flex-1">
+                <h2 className="text-lg font-bold text-text-primary">Employer</h2>
+                <p className="text-text-muted text-xs">
+                  Post jobs & discover talent
+                </p>
+              </div>
+              <svg className="w-5 h-5 text-text-muted group-hover:text-brand-yellow transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </div>
-            <div className="text-left">
-              <h2 className="text-base font-bold text-text-primary">I am an Employer</h2>
-              <p className="text-text-muted text-xs">
-                Post jobs & discover talent
-              </p>
-            </div>
           </button>
+        </div>
+
+        <div className="text-center mt-4">
+          <p className="text-text-muted text-[10px]">
+            Creative Portal © 2026
+          </p>
         </div>
       </div>
     </div>
