@@ -98,14 +98,10 @@ const applicants: Applicant[] = [
   },
 ];
 
-export async function GET(request: NextRequest, { params }: { params: { jobId: string } }) {
-  const jobId = params.jobId;
+export async function GET(request: NextRequest, { params }: { params: { jobId?: string } }) {
+  const jobId = params?.jobId;
 
-  if (jobId === "apply") {
-    return GET(request);
-  }
-
-  if (jobId) {
+  if (jobId && jobId !== "apply") {
     const jobApplicants = applicants.filter((a) => a.jobId === jobId);
     return NextResponse.json({ applicants: jobApplicants });
   }
