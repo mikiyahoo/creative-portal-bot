@@ -33,6 +33,12 @@ interface TelegramWebApp {
     impactOccurred: (style: "light" | "medium" | "heavy") => void;
     notificationOccurred: (type: "success" | "error" | "warning") => void;
   };
+  showConfirm: (message: string, callback: (confirmed: boolean) => void) => void;
+  showAlert: (message: string, callback?: () => void) => void;
+  openLink: (url: string) => void;
+  openTelegramLink: (url: string) => void;
+  onEvent: (eventType: string, callback: () => void) => void;
+  offEvent: (eventType: string, callback: () => void) => void;
   themeParams: Record<string, string>;
   initDataUnsafe: {
     user?: TelegramUser;
