@@ -39,6 +39,7 @@ interface TelegramWebApp {
   openTelegramLink: (url: string) => void;
   onEvent: (eventType: string, callback: () => void) => void;
   offEvent: (eventType: string, callback: () => void) => void;
+  initData: string;
   themeParams: Record<string, string>;
   initDataUnsafe: {
     user?: TelegramUser;
@@ -58,6 +59,7 @@ declare global {
 interface UseTelegramReturn {
   tg: TelegramWebApp | null;
   user: TelegramUser | null;
+  initData: string | null;
   onClose: () => void;
   onToggleButton: (show: boolean, text?: string, onClick?: () => void) => void;
   isReady: boolean;
@@ -66,6 +68,7 @@ interface UseTelegramReturn {
 export function useTelegram(): UseTelegramReturn {
   const [tg, setTg] = useState<TelegramWebApp | null>(null);
   const [user, setUser] = useState<TelegramUser | null>(null);
+  const [initData, setInitData] = useState<string | null>(null);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
@@ -77,6 +80,7 @@ export function useTelegram(): UseTelegramReturn {
       
       setTg(webApp);
       setUser(webApp.initDataUnsafe.user || null);
+      setInitData(webApp.initData || null);
       setIsReady(true);
     }
   }, []);
@@ -103,5 +107,5 @@ export function useTelegram(): UseTelegramReturn {
     }
   };
 
-  return { tg, user, onClose, onToggleButton, isReady };
+  return { tg, user, initData, onClose, onToggleButton, isReady };
 }
