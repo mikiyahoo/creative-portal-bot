@@ -106,8 +106,8 @@ export default function Home() {
   return (
     <div className="h-screen bg-background overflow-hidden flex flex-col">
       <div className="flex-1 flex flex-col max-w-md mx-auto w-full px-4 py-6">
-        <div className="text-center mb-6">
-          <div className="w-48 h-16 mx-auto rounded-2xl bg-obsidian border border-white/10 flex items-center justify-center overflow-hidden">
+        <div className="mb-6">
+          <div className="w-48 h-16 rounded-2xl bg-obsidian border border-white/10 flex items-center justify-center overflow-hidden mb-6">
             <Image
               src="/images/creative-portal-logo-white.png"
               alt="Creative Portal"
@@ -117,9 +117,14 @@ export default function Home() {
               className="w-full h-full object-contain"
             />
           </div>
-          <p className="text-text-muted text-sm mt-3">
-            {user ? `Welcome, ${user.first_name}!` : "Your creative journey starts here"}
-          </p>
+          <div className="text-left">
+            <h1 className="text-3xl font-extrabold text-text-primary">
+              Welcome, {user?.first_name || "!"}
+            </h1>
+            <p className="text-text-muted text-sm mt-1">
+              Your creative journey starts here
+            </p>
+          </div>
         </div>
 
         <div className="flex-1 flex flex-col gap-4 justify-center">
