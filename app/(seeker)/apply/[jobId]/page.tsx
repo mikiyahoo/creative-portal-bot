@@ -128,7 +128,7 @@ export default function ApplyPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background p-6 flex items-center justify-center">
+      <div className="min-h-screen bg-light-bg p-6 flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-yellow"></div>
       </div>
     );
@@ -136,43 +136,43 @@ export default function ApplyPage() {
 
   if (!job) {
     return (
-      <div className="min-h-screen bg-background p-6 flex items-center justify-center">
-        <p className="text-text-muted">Job not found</p>
+      <div className="min-h-screen bg-light-bg p-6 flex items-center justify-center">
+        <p className="text-light-text-muted">Job not found</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className="min-h-screen bg-light-bg pb-24">
       <div className="max-w-md mx-auto p-6">
         <div className="flex items-center gap-2 mb-6">
           <button
             onClick={() => router.back()}
-            className="p-2 hover:bg-white/5 rounded-full transition-colors"
+            className="p-2 hover:bg-light-border rounded-full transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-text-primary" />
+            <ArrowLeft className="w-5 h-5 text-light-text-primary" />
           </button>
-          <h1 className="text-xl font-extrabold text-text-primary uppercase">Apply Now</h1>
+          <h1 className="text-xl font-extrabold text-light-text-primary uppercase">Apply Now</h1>
         </div>
 
-        <div className="bg-surface rounded-3xl p-6 border border-white/5 mb-6">
-          <h2 className="font-extrabold text-text-primary text-lg uppercase mb-2">{job.title}</h2>
-          <p className="text-text-muted text-sm mb-2">{job.employerName}</p>
+        <div className="bg-light-surface rounded-3xl p-6 border border-light-border mb-6">
+          <h2 className="font-extrabold text-light-text-primary text-lg uppercase mb-2">{job.title}</h2>
+          <p className="text-light-text-muted text-sm mb-2">{job.employerName}</p>
           <p className="text-brand-yellow font-bold">{job.budget}</p>
         </div>
 
         <form className="space-y-6">
-          <div className="bg-surface rounded-3xl p-6 border border-white/5">
-            <label className="font-extrabold text-text-primary block mb-2 uppercase">
+          <div className="bg-light-surface rounded-3xl p-6 border border-light-border">
+            <label className="font-extrabold text-light-text-primary block mb-2 uppercase">
               Cover Letter
             </label>
             <div className="relative">
               <textarea
                 {...register("coverLetter")}
-                className="w-full rounded-2xl border border-white/10 p-4 h-40 focus:ring-2 focus:ring-brand-yellow focus:border-brand-yellow resize-none text-text-primary bg-background placeholder:text-text-muted"
+                className="w-full rounded-2xl border border-light-border p-4 h-40 focus:ring-2 focus:ring-brand-yellow focus:border-brand-yellow resize-none text-light-text-primary bg-light-bg placeholder:text-light-text-muted"
                 placeholder="Tell the employer why you're the perfect fit for this role..."
               />
-              <span className={`absolute bottom-3 right-4 text-xs ${charactersLeft < 100 ? "text-red-500" : "text-text-muted"}`}>
+              <span className={`absolute bottom-3 right-4 text-xs ${charactersLeft < 100 ? "text-red-500" : "text-light-text-muted"}`}>
                 {charactersLeft} Characters left
               </span>
             </div>
@@ -186,30 +186,30 @@ export default function ApplyPage() {
               <Info className="w-5 h-5 text-brand-yellow mt-0.5" />
               <div>
                 <p className="font-bold text-brand-yellow text-sm">Privacy Tip</p>
-                <p className="text-text-muted text-xs mt-1">
+                <p className="text-light-text-muted text-xs mt-1">
                   Make sure your Telegram username is set and your privacy settings allow others to see it. Go to Settings → Privacy → Telegram Username.
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-surface rounded-3xl p-6 border border-white/5">
-            <label className="font-extrabold text-text-primary block mb-4 uppercase">
+          <div className="bg-light-surface rounded-3xl p-6 border border-light-border">
+            <label className="font-extrabold text-light-text-primary block mb-4 uppercase">
               Your Telegram Username
             </label>
             <div className="relative">
               <MessageCircle className="absolute left-3 top-3 w-5 h-5 text-brand-yellow" />
               <input
                 {...register("telegramUsername")}
-                className="w-full pl-10 p-3 rounded-2xl border border-white/10 focus:ring-2 focus:ring-brand-yellow focus:border-brand-yellow text-text-primary bg-background placeholder:text-text-muted"
+                className="w-full pl-10 p-3 rounded-2xl border border-light-border focus:ring-2 focus:ring-brand-yellow focus:border-brand-yellow text-light-text-primary bg-light-bg placeholder:text-light-text-muted"
                 placeholder="@username"
               />
             </div>
           </div>
 
-          <div className="bg-surface rounded-3xl p-6 border border-white/5">
+          <div className="bg-light-surface rounded-3xl p-6 border border-light-border">
             <div className="flex items-center justify-between mb-4">
-              <label className="font-extrabold text-text-primary uppercase">
+              <label className="font-extrabold text-light-text-primary uppercase">
                 Portfolio Links
               </label>
               {fields.length < 5 && (
@@ -232,7 +232,7 @@ export default function ApplyPage() {
                 <div key={field.id} className="flex gap-2">
                   <input
                     {...register(`portfolioLinks.${index}.url` as const)}
-                    className="flex-1 p-3 rounded-2xl border border-white/10 focus:ring-2 focus:ring-brand-yellow focus:border-brand-yellow text-text-primary bg-background placeholder:text-text-muted"
+                    className="flex-1 p-3 rounded-2xl border border-light-border focus:ring-2 focus:ring-brand-yellow focus:border-brand-yellow text-light-text-primary bg-light-bg placeholder:text-light-text-muted"
                     placeholder="https://dribbble.com/yourwork"
                   />
                   {index > 0 && (
@@ -256,10 +256,10 @@ export default function ApplyPage() {
           </div>
 
           {isSubmitting && (
-            <div className="fixed inset-0 bg-black/70 flex items-center justify-center">
-              <div className="bg-surface p-6 rounded-3xl flex items-center gap-3 border border-white/10">
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+              <div className="bg-light-surface p-6 rounded-3xl flex items-center gap-3 border border-light-border">
                 <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-brand-yellow"></div>
-                <span className="text-text-primary font-bold">Submitting...</span>
+                <span className="text-light-text-primary font-bold">Submitting...</span>
               </div>
             </div>
           )}

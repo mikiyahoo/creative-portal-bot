@@ -119,29 +119,29 @@ export default function ApplicantsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-tg-bg p-4">
+    <div className="min-h-screen bg-light-bg p-4">
       <div className="max-w-md mx-auto">
         <div className="flex items-center gap-2 mb-6">
           <button
             onClick={() => router.back()}
-            className="p-2 hover:bg-tg-secondary/50 rounded-lg transition-colors"
+            className="p-2 hover:bg-light-border rounded-lg transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-tg-text" />
+            <ArrowLeft className="w-5 h-5 text-light-text-primary" />
           </button>
-          <h1 className="text-xl font-bold text-tg-text">Applicants</h1>
+          <h1 className="text-xl font-bold text-light-text-primary">Applicants</h1>
         </div>
 
         {loading ? (
           <div className="space-y-4">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-tg-secondary/50 animate-pulse rounded-xl p-4 h-40" />
+              <div key={i} className="bg-light-surface animate-pulse rounded-xl p-4 h-40" />
             ))}
           </div>
         ) : applicants.length === 0 ? (
-          <div className="bg-tg-secondary/30 backdrop-blur-md rounded-2xl p-8 text-center border border-white/10">
-            <User className="w-12 h-12 text-tg-hint mx-auto mb-3" />
-            <p className="text-tg-text font-medium">No applicants yet</p>
-            <p className="text-tg-hint text-sm mt-2">
+          <div className="bg-light-surface rounded-2xl p-8 text-center border border-light-border">
+            <User className="w-12 h-12 text-light-text-muted mx-auto mb-3" />
+            <p className="text-light-text-primary font-medium">No applicants yet</p>
+            <p className="text-light-text-muted text-sm mt-2">
               Applicants will appear here when they apply
             </p>
           </div>
@@ -150,16 +150,16 @@ export default function ApplicantsPage() {
             {applicants.map((applicant) => (
               <div
                 key={applicant.id}
-                className="bg-tg-secondary/50 backdrop-blur-md rounded-2xl p-5 border border-white/10"
+                className="bg-light-surface rounded-2xl p-5 border border-light-border"
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-tg-button/20 rounded-full flex items-center justify-center">
-                      <User className="w-6 h-6 text-tg-button" />
+                    <div className="w-12 h-12 bg-brand-yellow/20 rounded-full flex items-center justify-center">
+                      <User className="w-6 h-6 text-brand-yellow" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-tg-text">{applicant.fullName}</h3>
-                      <p className="text-tg-hint text-sm flex items-center gap-1">
+                      <h3 className="font-semibold text-light-text-primary">{applicant.fullName}</h3>
+                      <p className="text-light-text-muted text-sm flex items-center gap-1">
                         <Briefcase className="w-3 h-3" />
                         {applicant.professionalTitle}
                       </p>
@@ -168,13 +168,13 @@ export default function ApplicantsPage() {
                   {getStatusBadge(applicant.status)}
                 </div>
 
-                <p className="text-tg-text text-sm mb-3 line-clamp-2">{applicant.bio}</p>
+                <p className="text-light-text-secondary text-sm mb-3 line-clamp-2">{applicant.bio}</p>
 
                 <div className="flex flex-wrap gap-2 mb-4">
                   {applicant.skills.map((skill) => (
                     <span
                       key={skill}
-                      className="px-2 py-1 bg-tg-button/10 text-tg-button text-xs rounded-full"
+                      className="px-2 py-1 bg-brand-yellow/10 text-brand-yellow text-xs rounded-full"
                     >
                       {skill}
                     </span>
@@ -184,7 +184,7 @@ export default function ApplicantsPage() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleViewPortfolio(applicant.portfolioLink)}
-                    className="flex-1 py-2 bg-tg-button/10 text-tg-button rounded-lg text-sm font-medium flex items-center justify-center gap-2"
+                    className="flex-1 py-2 bg-brand-yellow/10 text-brand-yellow rounded-lg text-sm font-bold flex items-center justify-center gap-2"
                   >
                     <ExternalLink className="w-4 h-4" />
                     Portfolio
@@ -192,7 +192,7 @@ export default function ApplicantsPage() {
                   
                   <button
                     onClick={() => handleContact(applicant.telegramId.toString())}
-                    className="flex-1 py-2 bg-tg-button/10 text-tg-button rounded-lg text-sm font-medium flex items-center justify-center gap-2"
+                    className="flex-1 py-2 bg-brand-yellow/10 text-brand-yellow rounded-lg text-sm font-bold flex items-center justify-center gap-2"
                   >
                     <MessageCircle className="w-4 h-4" />
                     Contact
@@ -203,14 +203,14 @@ export default function ApplicantsPage() {
                   <div className="flex gap-2 mt-3">
                     <button
                       onClick={() => handleAction(applicant.id, "shortlist")}
-                      className="flex-1 py-2 bg-green-500/20 text-green-500 rounded-lg text-sm font-medium flex items-center justify-center gap-2"
+                      className="flex-1 py-2 bg-green-500/20 text-green-600 rounded-lg text-sm font-bold flex items-center justify-center gap-2"
                     >
                       <Check className="w-4 h-4" />
                       Shortlist
                     </button>
                     <button
                       onClick={() => handleAction(applicant.id, "decline")}
-                      className="flex-1 py-2 bg-red-500/20 text-red-500 rounded-lg text-sm font-medium flex items-center justify-center gap-2"
+                      className="flex-1 py-2 bg-red-500/20 text-red-600 rounded-lg text-sm font-bold flex items-center justify-center gap-2"
                     >
                       <X className="w-4 h-4" />
                       Decline

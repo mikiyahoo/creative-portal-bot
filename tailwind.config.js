@@ -29,6 +29,14 @@ module.exports = {
         "tg-button-text": "var(--tg-theme-button-text-color)",
         "tg-secondary": "var(--tg-theme-secondary-bg-color)",
         "tg-hint": "var(--tg-theme-hint-color)",
+        light: {
+          bg: "#F8F9FA",
+          surface: "#FFFFFF",
+          "text-primary": "#000000",
+          "text-secondary": "#6B7280",
+          "text-muted": "#9CA3AF",
+          border: "#E5E7EB",
+        },
       },
       borderRadius: {
         "2xl": "16px",

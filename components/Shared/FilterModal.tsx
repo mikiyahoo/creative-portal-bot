@@ -53,21 +53,21 @@ export function FilterModal({ isOpen, onClose, onApply }: FilterModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/70 flex items-end">
-      <div className="w-full bg-surface rounded-t-3xl max-h-[80vh] overflow-hidden border-t border-white/10">
-        <div className="p-6 pb-4 border-b border-white/10">
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-end">
+      <div className="w-full bg-light-surface rounded-t-3xl max-h-[80vh] overflow-hidden border-t border-light-border">
+        <div className="p-6 pb-4 border-b border-light-border">
           <div className="flex items-center justify-between mb-2">
-            <h2 className="text-xl font-extrabold text-text-primary uppercase">Filters</h2>
+            <h2 className="text-xl font-extrabold text-light-text-primary uppercase">Filters</h2>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-white/5 rounded-full transition-colors"
+              className="p-2 hover:bg-light-border rounded-full transition-colors"
             >
-              <X className="w-5 h-5 text-text-muted" />
+              <X className="w-5 h-5 text-light-text-muted" />
             </button>
           </div>
           <button
             onClick={resetFilters}
-            className="flex items-center gap-1 text-text-muted text-sm hover:text-brand-yellow transition-colors"
+            className="flex items-center gap-1 text-light-text-muted text-sm hover:text-brand-yellow transition-colors"
           >
             <RotateCcw className="w-4 h-4" />
             Reset all
@@ -101,16 +101,16 @@ export function FilterModal({ isOpen, onClose, onApply }: FilterModalProps) {
           />
         </div>
 
-        <div className="p-6 pt-4 border-t border-white/10 flex gap-3">
+        <div className="p-6 pt-4 border-t border-light-border flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 py-4 border-2 border-white/20 text-text-secondary rounded-2xl font-extrabold text-lg hover:bg-white/5 transition-colors"
+            className="flex-1 py-4 border-2 border-light-border text-light-text-secondary rounded-2xl font-bold text-lg hover:bg-light-border transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleApply}
-            className="flex-1 py-4 bg-brand-yellow text-black rounded-2xl font-extrabold text-lg active:scale-95 transition-all"
+            className="flex-1 py-4 bg-brand-yellow text-black rounded-2xl font-bold text-lg active:scale-95 transition-all"
           >
             Filter
           </button>
@@ -131,12 +131,12 @@ interface FilterSectionProps {
 
 function FilterSection({ title, options, selected, onToggle, isExpanded, onToggleExpand }: FilterSectionProps) {
   return (
-    <div className="border border-white/10 rounded-2xl overflow-hidden">
+    <div className="border border-light-border rounded-2xl overflow-hidden">
       <button
         onClick={onToggleExpand}
-        className="w-full flex items-center justify-between p-4 hover:bg-white/5 transition-colors"
+        className="w-full flex items-center justify-between p-4 hover:bg-light-bg transition-colors"
       >
-        <span className="font-extrabold text-text-primary uppercase">{title}</span>
+        <span className="font-extrabold text-light-text-primary uppercase">{title}</span>
         <ChevronDown className={`w-5 h-5 text-brand-yellow transition-transform ${isExpanded ? "rotate-180" : ""}`} />
       </button>
       
@@ -145,15 +145,15 @@ function FilterSection({ title, options, selected, onToggle, isExpanded, onToggl
           {options.map((option) => (
             <label
               key={option}
-              className="flex items-center gap-3 p-2 hover:bg-white/5 rounded-xl cursor-pointer"
+              className="flex items-center gap-3 p-2 hover:bg-light-bg rounded-xl cursor-pointer"
             >
               <input
                 type="checkbox"
                 checked={selected.includes(option)}
                 onChange={() => onToggle(option)}
-                className="w-5 h-5 rounded border-white/30 text-brand-yellow focus:ring-brand-yellow bg-transparent"
+                className="w-5 h-5 rounded border-light-border text-brand-yellow focus:ring-brand-yellow bg-transparent"
               />
-              <span className="text-text-secondary">{option}</span>
+              <span className="text-light-text-secondary">{option}</span>
             </label>
           ))}
         </div>

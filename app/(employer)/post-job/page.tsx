@@ -132,7 +132,7 @@ export default function PostJobPage() {
     };
 
     return (
-      <div className="min-h-screen bg-tg-bg p-4 pb-24">
+      <div className="min-h-screen bg-light-bg p-4 pb-24">
         <div className="max-w-md mx-auto">
           <div className="flex items-center justify-between mb-6">
             <button
@@ -140,28 +140,28 @@ export default function PostJobPage() {
                 tg?.HapticFeedback?.impactOccurred("light");
                 setIsPreview(false);
               }}
-              className="p-2 hover:bg-tg-secondary/50 rounded-lg transition-colors"
+              className="p-2 hover:bg-light-border rounded-lg transition-colors"
             >
-              <ArrowLeft className="w-5 h-5 text-tg-text" />
+              <ArrowLeft className="w-5 h-5 text-light-text-primary" />
             </button>
-            <h1 className="text-xl font-bold text-tg-text">Preview</h1>
+            <h1 className="text-xl font-bold text-light-text-primary">Preview</h1>
             <div className="w-9" />
           </div>
 
-          <div className="bg-tg-secondary/50 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+          <div className="bg-light-surface rounded-2xl p-6 border border-light-border">
             <div className="flex items-start justify-between mb-4">
-              <h2 className="text-2xl font-bold text-tg-text">
+              <h2 className="text-2xl font-bold text-light-text-primary">
                 {watchedData.title}
               </h2>
               {isPinned && (
-                <span className="bg-tg-button/20 text-tg-button text-xs px-2 py-1 rounded-full">
+                <span className="bg-brand-yellow/20 text-brand-yellow text-xs px-2 py-1 rounded-full">
                   Pinned
                 </span>
               )}
             </div>
             
-            <div className="flex items-center gap-4 text-sm text-tg-hint mb-4">
-              <span className="px-3 py-1 bg-tg-button/10 rounded-full text-tg-button">
+            <div className="flex items-center gap-4 text-sm text-light-text-muted mb-4">
+              <span className="px-3 py-1 bg-brand-yellow/10 rounded-full text-brand-yellow">
                 {DISCIPLINES.find(d => d.id === watchedData.discipline)?.label || watchedData.discipline}
               </span>
               <span className="flex items-center gap-1">
@@ -172,21 +172,21 @@ export default function PostJobPage() {
               </span>
             </div>
 
-            <p className="text-tg-button font-semibold text-lg mb-4">
+            <p className="text-brand-yellow font-bold text-lg mb-4">
               {watchedData.budget}
             </p>
             
-            <p className="text-tg-text whitespace-pre-wrap mb-4">{watchedData.description}</p>
+            <p className="text-light-text-secondary whitespace-pre-wrap mb-4">{watchedData.description}</p>
             
-            <div className="pt-4 border-t border-white/10 flex justify-between text-sm">
-              <span className="text-tg-hint">Deadline: {watchedData.deadline}</span>
+            <div className="pt-4 border-t border-light-border flex justify-between text-sm">
+              <span className="text-light-text-muted">Deadline: {watchedData.deadline}</span>
               {broadcastToChannel && (
-                <span className="text-tg-button">Posted to Channel</span>
+                <span className="text-brand-yellow">Posted to Channel</span>
               )}
             </div>
           </div>
 
-          <p className="text-tg-hint text-sm text-center mt-4">
+          <p className="text-light-text-muted text-sm text-center mt-4">
             This is how your job post will appear
           </p>
         </div>
@@ -195,32 +195,32 @@ export default function PostJobPage() {
   }
 
   return (
-    <div className="min-h-screen bg-tg-bg p-4 pb-24">
+    <div className="min-h-screen bg-light-bg p-4 pb-24">
       <div className="max-w-md mx-auto">
         <div className="flex items-center gap-2 mb-6">
           <button
             onClick={() => router.back()}
-            className="p-2 hover:bg-tg-secondary/50 rounded-lg transition-colors"
+            className="p-2 hover:bg-light-border rounded-lg transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-tg-text" />
+            <ArrowLeft className="w-5 h-5 text-light-text-primary" />
           </button>
-          <h1 className="text-xl font-bold text-tg-text">Post a Job</h1>
+          <h1 className="text-xl font-bold text-light-text-primary">Post a Job</h1>
         </div>
 
         <form className="space-y-5">
-          <div className="bg-tg-secondary/30 backdrop-blur-md rounded-2xl p-5 border border-white/10 space-y-4">
-            <h2 className="font-semibold text-tg-text flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-tg-button" />
+          <div className="bg-light-surface rounded-2xl p-5 border border-light-border space-y-4">
+            <h2 className="font-bold text-light-text-primary flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-brand-yellow" />
               Job Details
             </h2>
 
             <div>
-              <label className="block text-sm font-medium text-tg-text mb-2">
+              <label className="block text-sm font-medium text-light-text-primary mb-2">
                 Job Title
               </label>
               <input
                 {...register("title")}
-                className="w-full p-3 bg-tg-bg/50 border border-white/10 rounded-xl text-tg-text focus:outline-none focus:ring-2 focus:ring-tg-button"
+                className="w-full p-3 bg-light-bg border border-light-border rounded-xl text-light-text-primary focus:outline-none focus:ring-2 focus:ring-brand-yellow"
                 placeholder="e.g., Senior UI Designer"
               />
               {errors.title && (
@@ -229,12 +229,12 @@ export default function PostJobPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-tg-text mb-2">
+              <label className="block text-sm font-medium text-light-text-primary mb-2">
                 Creative Discipline
               </label>
               <select
                 {...register("discipline")}
-                className="w-full p-3 bg-tg-bg/50 border border-white/10 rounded-xl text-tg-text focus:outline-none focus:ring-2 focus:ring-tg-button"
+                className="w-full p-3 bg-light-bg border border-light-border rounded-xl text-light-text-primary focus:outline-none focus:ring-2 focus:ring-brand-yellow"
               >
                 <option value="">Select a discipline</option>
                 {DISCIPLINES.map((d) => (
@@ -247,12 +247,12 @@ export default function PostJobPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-tg-text mb-2">
+              <label className="block text-sm font-medium text-light-text-primary mb-2">
                 Budget Range (ETB)
               </label>
               <input
                 {...register("budget")}
-                className="w-full p-3 bg-tg-bg/50 border border-white/10 rounded-xl text-tg-text focus:outline-none focus:ring-2 focus:ring-tg-button"
+                className="w-full p-3 bg-light-bg border border-light-border rounded-xl text-light-text-primary focus:outline-none focus:ring-2 focus:ring-brand-yellow"
                 placeholder="e.g., $500 - $1,000"
               />
               {errors.budget && (
@@ -261,7 +261,7 @@ export default function PostJobPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-tg-text mb-2">
+              <label className="block text-sm font-medium text-light-text-primary mb-2">
                 Job Type
               </label>
               <div className="flex gap-2">
@@ -272,8 +272,8 @@ export default function PostJobPage() {
                     onClick={() => setValue("jobType", type)}
                     className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                       watchedData.jobType === type
-                        ? "bg-tg-button text-tg-button-text"
-                        : "bg-tg-bg/50 border border-white/10 text-tg-text"
+                        ? "bg-brand-yellow text-black"
+                        : "bg-light-bg border border-light-border text-light-text-primary"
                     }`}
                   >
                     {type === "remote" && <Globe className="w-4 h-4 inline mr-1" />}
@@ -286,14 +286,14 @@ export default function PostJobPage() {
             </div>
           </div>
 
-          <div className="bg-tg-secondary/30 backdrop-blur-md rounded-2xl p-5 border border-white/10 space-y-4">
+          <div className="bg-light-surface rounded-2xl p-5 border border-light-border space-y-4">
             <div>
-              <label className="block text-sm font-medium text-tg-text mb-2">
+              <label className="block text-sm font-medium text-light-text-primary mb-2">
                 Description
               </label>
               <textarea
                 {...register("description")}
-                className="w-full p-3 bg-tg-bg/50 border border-white/10 rounded-xl text-tg-text focus:outline-none focus:ring-2 focus:ring-tg-button h-40 resize-none"
+                className="w-full p-3 bg-light-bg border border-light-border rounded-xl text-light-text-primary focus:outline-none focus:ring-2 focus:ring-brand-yellow h-40 resize-none"
                 placeholder="Describe the role, requirements, and what makes this opportunity exciting..."
               />
               {errors.description && (
@@ -302,13 +302,13 @@ export default function PostJobPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-tg-text mb-2">
+              <label className="block text-sm font-medium text-light-text-primary mb-2">
                 Deadline
               </label>
               <input
                 {...register("deadline")}
                 type="date"
-                className="w-full p-3 bg-tg-bg/50 border border-white/10 rounded-xl text-tg-text focus:outline-none focus:ring-2 focus:ring-tg-button"
+                className="w-full p-3 bg-light-bg border border-light-border rounded-xl text-light-text-primary focus:outline-none focus:ring-2 focus:ring-brand-yellow"
               />
               {errors.deadline && (
                 <p className="text-red-500 text-sm mt-1">{errors.deadline.message}</p>
@@ -316,13 +316,13 @@ export default function PostJobPage() {
             </div>
           </div>
 
-          <div className="bg-tg-secondary/30 backdrop-blur-md rounded-2xl p-5 border border-white/10 space-y-4">
-            <h2 className="font-semibold text-tg-text">Premium Features</h2>
+          <div className="bg-light-surface rounded-2xl p-5 border border-light-border space-y-4">
+            <h2 className="font-bold text-light-text-primary">Premium Features</h2>
             
-            <label className="flex items-center justify-between p-3 bg-tg-bg/30 rounded-xl cursor-pointer">
+            <label className="flex items-center justify-between p-3 bg-light-bg rounded-xl cursor-pointer">
               <div>
-                <span className="text-tg-text font-medium">Pin to Top</span>
-                <p className="text-tg-hint text-xs">Keep your job at the top of the feed</p>
+                <span className="text-light-text-primary font-medium">Pin to Top</span>
+                <p className="text-light-text-muted text-xs">Keep your job at the top of the feed</p>
               </div>
               <div
                 onClick={() => {
@@ -330,7 +330,7 @@ export default function PostJobPage() {
                   setIsPinned(!isPinned);
                 }}
                 className={`w-12 h-6 rounded-full transition-colors ${
-                  isPinned ? "bg-tg-button" : "bg-tg-secondary"
+                  isPinned ? "bg-brand-yellow" : "bg-light-border"
                 }`}
               >
                 <div className={`w-5 h-5 bg-white rounded-full shadow transition-transform ${
@@ -339,10 +339,10 @@ export default function PostJobPage() {
               </div>
             </label>
 
-            <label className="flex items-center justify-between p-3 bg-tg-bg/30 rounded-xl cursor-pointer">
+            <label className="flex items-center justify-between p-3 bg-light-bg rounded-xl cursor-pointer">
               <div>
-                <span className="text-tg-text font-medium">Broadcast to Channel</span>
-                <p className="text-tg-hint text-xs">Share to @CreativePortalJobs</p>
+                <span className="text-light-text-primary font-medium">Broadcast to Channel</span>
+                <p className="text-light-text-muted text-xs">Share to @CreativePortalJobs</p>
               </div>
               <div
                 onClick={() => {
@@ -350,7 +350,7 @@ export default function PostJobPage() {
                   setBroadcastToChannel(!broadcastToChannel);
                 }}
                 className={`w-12 h-6 rounded-full transition-colors ${
-                  broadcastToChannel ? "bg-tg-button" : "bg-tg-secondary"
+                  broadcastToChannel ? "bg-brand-yellow" : "bg-light-border"
                 }`}
               >
                 <div className={`w-5 h-5 bg-white rounded-full shadow transition-transform ${
@@ -362,9 +362,9 @@ export default function PostJobPage() {
 
           {isSubmitting && (
             <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
-              <div className="bg-tg-bg p-6 rounded-2xl flex items-center gap-3">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-tg-button"></div>
-                <span className="text-tg-text">Posting job...</span>
+              <div className="bg-light-surface p-6 rounded-2xl flex items-center gap-3">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-brand-yellow"></div>
+                <span className="text-light-text-primary">Posting job...</span>
               </div>
             </div>
           )}

@@ -86,15 +86,14 @@ export function JobCard({ job, onApply }: JobCardProps) {
 
   return (
     <div className={`
-      relative bg-obsidian rounded-3xl p-6 
-      border border-white/10 
-      shadow-[inset_0_1px_1px_rgba(255,184,0,0.05)]
-      hover:border-brand-yellow/30 hover:shadow-[0_0_20px_rgba(255,184,0,0.15)]
+      relative bg-light-surface rounded-3xl p-6 
+      border border-light-border 
+      hover:border-brand-yellow/30 hover:shadow-[0_4px_20px_rgba(255,184,0,0.15)]
       transition-all duration-300
       ${isFeatured ? 'before:absolute before:left-0 before:top-0 before:bottom-0 before:w-1 before:bg-brand-yellow before:rounded-l-3xl' : ''}
     `}>
       <div className="flex items-start justify-between mb-3">
-        <h3 className="font-extrabold text-text-primary text-lg uppercase tracking-wide leading-tight">
+        <h3 className="font-extrabold text-light-text-primary text-lg uppercase tracking-wide leading-tight">
           {job.title}
         </h3>
         {isFeatured && (
@@ -104,11 +103,11 @@ export function JobCard({ job, onApply }: JobCardProps) {
         )}
       </div>
 
-      <div className="flex items-center gap-2 text-text-muted text-sm mb-4">
+      <div className="flex items-center gap-2 text-light-text-muted text-sm mb-4">
         <Building2 className="w-4 h-4 text-brand-yellow" />
-        <span className="font-medium text-text-secondary">{job.employerName}</span>
-        <span className="text-text-muted">•</span>
-        <span className="text-text-muted">{getTimeAgo(job.createdAt)}</span>
+        <span className="font-medium text-light-text-secondary">{job.employerName}</span>
+        <span className="text-light-text-muted">•</span>
+        <span className="text-light-text-muted">{getTimeAgo(job.createdAt)}</span>
       </div>
 
       <div className="flex flex-wrap gap-2 mb-4">
@@ -116,13 +115,13 @@ export function JobCard({ job, onApply }: JobCardProps) {
           {formatDiscipline(job.discipline)}
         </span>
         {job.jobType && (
-          <span className="px-3 py-1 bg-white/5 text-text-muted text-xs font-medium rounded-full">
+          <span className="px-3 py-1 bg-light-bg text-light-text-muted text-xs font-medium rounded-full">
             {formatJobType(job.jobType)}
           </span>
         )}
       </div>
 
-      <div className="flex flex-wrap items-center gap-4 text-text-muted text-sm mb-4">
+      <div className="flex flex-wrap items-center gap-4 text-light-text-muted text-sm mb-4">
         <div className="flex items-center gap-1.5">
           <div className="p-1.5 rounded-full bg-brand-yellow/10">
             <DollarSign className="w-3.5 h-3.5 text-brand-yellow" />
@@ -153,19 +152,19 @@ export function JobCard({ job, onApply }: JobCardProps) {
         </div>
       </div>
 
-      <p className="text-text-muted text-sm line-clamp-2 mb-5">{job.description}</p>
+      <p className="text-light-text-muted text-sm line-clamp-2 mb-5">{job.description}</p>
 
       <div className="flex gap-3">
         <button
           onClick={handleViewDetails}
-          className="flex-1 py-3 border-2 border-brand-yellow/50 text-brand-yellow rounded-2xl font-extrabold text-sm hover:bg-brand-yellow/10 hover:border-brand-yellow transition-all"
+          className="flex-1 py-3 border-2 border-brand-yellow/50 text-brand-yellow rounded-2xl font-bold text-sm hover:bg-brand-yellow/10 hover:border-brand-yellow transition-all"
         >
           View Details
         </button>
         {onApply && (
           <button
             onClick={handleApply}
-            className="flex-1 py-3 bg-brand-yellow text-black rounded-2xl font-extrabold text-sm hover:bg-brand-yellow/90 active:scale-95 transition-all"
+            className="flex-1 py-3 bg-brand-yellow text-black rounded-2xl font-bold text-sm hover:bg-brand-yellow/90 active:scale-95 transition-all"
           >
             Apply Now
           </button>

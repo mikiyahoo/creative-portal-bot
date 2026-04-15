@@ -92,9 +92,9 @@ export default function EmployerDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-tg-bg p-4">
+    <div className="min-h-screen bg-light-bg p-4">
       <div className="max-w-md mx-auto">
-        <h1 className="text-xl font-bold text-tg-text mb-6">Employer Dashboard</h1>
+        <h1 className="text-xl font-bold text-light-text-primary mb-6">Employer Dashboard</h1>
 
         <button
           onClick={() => {
@@ -103,19 +103,19 @@ export default function EmployerDashboard() {
             }
             router.push("/post-job");
           }}
-          className="w-full p-5 bg-gradient-to-r from-tg-button to-tg-button/80 rounded-xl flex items-center gap-4 text-tg-button-text shadow-lg"
+          className="w-full p-5 bg-brand-yellow rounded-2xl flex items-center gap-4 text-black shadow-lg hover:bg-brand-yellow/90 transition-all"
         >
-          <div className="p-3 bg-white/20 rounded-lg">
+          <div className="p-3 bg-black/10 rounded-xl">
             <Plus className="w-6 h-6" />
           </div>
           <div className="text-left">
-            <h2 className="text-lg font-semibold">Post a New Job</h2>
+            <h2 className="text-lg font-bold">Post a New Job</h2>
             <p className="text-sm opacity-80">Create a new job listing</p>
           </div>
         </button>
 
         <div className="mt-8">
-          <div className="flex gap-2 mb-4 bg-tg-secondary/50 p-1 rounded-xl">
+          <div className="flex gap-2 mb-4 bg-light-surface p-1 rounded-xl border border-light-border">
             {tabs.map((tab) => (
               <button
                 key={tab.key}
@@ -127,8 +127,8 @@ export default function EmployerDashboard() {
                 }}
                 className={`flex-1 py-2 px-3 rounded-lg flex items-center justify-center gap-2 text-sm font-medium transition-colors ${
                   activeTab === tab.key
-                    ? "bg-tg-button text-tg-button-text"
-                    : "text-tg-text"
+                    ? "bg-brand-yellow text-black"
+                    : "text-light-text-secondary"
                 }`}
               >
                 {tab.icon}
@@ -140,19 +140,19 @@ export default function EmployerDashboard() {
           {loading ? (
             <div className="space-y-3">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="bg-tg-secondary/50 animate-pulse rounded-xl p-4 h-24" />
+                <div key={i} className="bg-light-surface animate-pulse rounded-xl p-4 h-24" />
               ))}
             </div>
           ) : filteredJobs.length === 0 ? (
-            <div className="bg-tg-secondary/30 backdrop-blur-md rounded-xl p-8 text-center border border-white/10">
-              <Briefcase className="w-12 h-12 text-tg-hint mx-auto mb-3" />
-              <p className="text-tg-text font-medium">
+            <div className="bg-light-surface rounded-xl p-8 text-center border border-light-border">
+              <Briefcase className="w-12 h-12 text-light-text-muted mx-auto mb-3" />
+              <p className="text-light-text-primary font-medium">
                 {activeTab === "active" && "No active jobs"}
                 {activeTab === "drafts" && "No draft jobs"}
                 {activeTab === "expired" && "No expired jobs"}
               </p>
               {activeTab === "active" && (
-                <p className="text-tg-hint text-sm mt-2">
+                <p className="text-light-text-muted text-sm mt-2">
                   Post your first job to find talent
                 </p>
               )}
@@ -168,23 +168,23 @@ export default function EmployerDashboard() {
                     }
                     router.push(`/dashboard/${job.id}/applicants`);
                   }}
-                  className="w-full text-left bg-tg-secondary/50 backdrop-blur-md rounded-xl p-4 border border-white/10 transition-transform active:scale-[0.98]"
+                  className="w-full text-left bg-light-surface rounded-xl p-4 border border-light-border transition-transform active:scale-[0.98] hover:border-brand-yellow/30"
                 >
                   <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-semibold text-tg-text">{job.title}</h3>
+                    <h3 className="font-semibold text-light-text-primary">{job.title}</h3>
                     {job.isPinned && (
-                      <span className="text-xs bg-tg-button/20 text-tg-button px-2 py-0.5 rounded">
+                      <span className="text-xs bg-brand-yellow/20 text-brand-yellow px-2 py-0.5 rounded">
                         Pinned
                       </span>
                     )}
                   </div>
-                  <div className="flex items-center gap-4 text-sm text-tg-hint mb-3">
+                  <div className="flex items-center gap-4 text-sm text-light-text-muted mb-3">
                     <span>{job.budget}</span>
                     <span>{job.discipline || "General"}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     {getStatusBadge(job.status)}
-                    <div className="flex items-center gap-1 text-tg-hint text-sm">
+                    <div className="flex items-center gap-1 text-light-text-muted text-sm">
                       <Users className="w-4 h-4" />
                       <span>{job.applicants} Applicants</span>
                     </div>

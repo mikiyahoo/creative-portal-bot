@@ -139,9 +139,9 @@ export default function JobsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background p-6">
+      <div className="min-h-screen bg-light-bg p-6">
         <div className="max-w-md mx-auto">
-          <h1 className="text-2xl font-extrabold text-text-primary uppercase mb-6 tracking-wide">Discover Jobs</h1>
+          <h1 className="text-2xl font-extrabold text-light-text-primary uppercase mb-6 tracking-wide">Discover Jobs</h1>
           <JobFeedSkeleton />
         </div>
       </div>
@@ -149,9 +149,9 @@ export default function JobsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-6">
+    <div className="min-h-screen bg-light-bg p-6">
       <div className="max-w-md mx-auto">
-        <h1 className="text-2xl font-extrabold text-text-primary uppercase mb-6 tracking-wide">Discover Jobs</h1>
+        <h1 className="text-2xl font-extrabold text-light-text-primary uppercase mb-6 tracking-wide">Discover Jobs</h1>
 
         <div className="flex gap-3 mb-6">
           <div className="relative flex-1">
@@ -161,7 +161,7 @@ export default function JobsPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => tg?.HapticFeedback?.impactOccurred("light")}
-              className="w-full pl-12 pr-4 py-3.5 bg-white/5 rounded-full border border-white/5 text-text-primary focus:outline-none focus:border-brand-yellow focus:ring-1 focus:ring-brand-yellow placeholder:text-text-muted transition-all"
+              className="w-full pl-12 pr-4 py-3.5 bg-light-surface rounded-full border border-light-border text-light-text-primary focus:outline-none focus:border-brand-yellow focus:ring-1 focus:ring-brand-yellow placeholder:text-light-text-muted transition-all"
               placeholder="Search jobs..."
             />
           </div>
@@ -170,7 +170,7 @@ export default function JobsPage() {
               tg?.HapticFeedback?.impactOccurred("light");
               setShowFilters(true);
             }}
-            className="p-3.5 bg-white/5 rounded-full border border-white/5 hover:bg-white/10 hover:border-brand-yellow/30 transition-all"
+            className="p-3.5 bg-light-surface rounded-full border border-light-border hover:border-brand-yellow/30 transition-all"
           >
             <SlidersHorizontal className="w-5 h-5 text-brand-yellow" />
           </button>

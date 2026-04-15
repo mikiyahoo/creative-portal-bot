@@ -147,16 +147,16 @@ export default function ProfilePage() {
   }, [step, tg, handleSubmit, nextStep, canProceed]);
 
   return (
-    <div className="min-h-screen bg-tg-bg p-4 pb-24">
+    <div className="min-h-screen bg-light-bg p-6 pb-24">
       <div className="max-w-md mx-auto">
-        <div className="flex items-center gap-2 mb-6">
+        <div className="flex items-center gap-3 mb-6">
           <button
             onClick={() => router.back()}
-            className="p-2 hover:bg-tg-secondary/50 rounded-lg transition-colors"
+            className="p-2 hover:bg-light-border rounded-full transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-tg-text" />
+            <ArrowLeft className="w-5 h-5 text-light-text-primary" />
           </button>
-          <h1 className="text-xl font-bold text-tg-text">Create Profile</h1>
+          <h1 className="text-xl font-extrabold text-light-text-primary uppercase">Create Profile</h1>
         </div>
 
         <div className="flex gap-2 mb-8">
@@ -165,8 +165,8 @@ export default function ProfilePage() {
               key={s}
               className={`h-1.5 flex-1 rounded-full transition-colors ${
                 s <= step 
-                  ? "bg-gradient-to-r from-tg-button to-tg-button/80" 
-                  : "bg-tg-secondary"
+                  ? "bg-brand-yellow" 
+                  : "bg-light-border"
               }`}
             />
           ))}
@@ -175,22 +175,22 @@ export default function ProfilePage() {
         <form onSubmit={handleSubmit(onSubmit)}>
           {step === 1 && (
             <div className="space-y-6">
-              <div className="bg-tg-secondary/30 backdrop-blur-md rounded-2xl p-6 border border-white/10">
-                <h2 className="text-lg font-semibold text-tg-text mb-4 flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-tg-button" />
+              <div className="bg-light-surface rounded-3xl p-6 border border-light-border shadow-sm">
+                <h2 className="text-lg font-bold text-light-text-primary mb-4 flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-brand-yellow" />
                   Tell us about yourself
                 </h2>
                 
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-tg-text mb-2">
+                    <label className="block text-sm font-bold text-light-text-primary mb-2">
                       Professional Title
                     </label>
                     <div className="relative">
-                      <Palette className="absolute left-3 top-3 w-5 h-5 text-tg-hint" />
+                      <Palette className="absolute left-3 top-3 w-5 h-5 text-light-text-muted" />
                       <input
                         {...register("professionalTitle")}
-                        className="w-full pl-10 p-3 bg-tg-bg/50 border border-white/10 rounded-xl text-tg-text focus:outline-none focus:ring-2 focus:ring-tg-button"
+                        className="w-full pl-10 p-3.5 bg-light-bg border border-light-border rounded-2xl text-light-text-primary focus:outline-none focus:ring-2 focus:ring-brand-yellow"
                         placeholder="e.g., Motion Designer"
                       />
                     </div>
@@ -202,12 +202,12 @@ export default function ProfilePage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-tg-text mb-2">
+                    <label className="block text-sm font-bold text-light-text-primary mb-2">
                       Bio
                     </label>
                     <textarea
                       {...register("bio")}
-                      className="w-full p-3 bg-tg-bg/50 border border-white/10 rounded-xl text-tg-text focus:outline-none focus:ring-2 focus:ring-tg-button h-32 resize-none"
+                      className="w-full p-3.5 bg-light-bg border border-light-border rounded-2xl text-light-text-primary focus:outline-none focus:ring-2 focus:ring-brand-yellow h-32 resize-none"
                       placeholder="Share your experience, style, and what makes you unique..."
                     />
                     {errors.bio && (
@@ -221,11 +221,11 @@ export default function ProfilePage() {
 
           {step === 2 && (
             <div className="space-y-6">
-              <div className="bg-tg-secondary/30 backdrop-blur-md rounded-2xl p-6 border border-white/10">
-                <h2 className="text-lg font-semibold text-tg-text mb-4">
+              <div className="bg-light-surface rounded-3xl p-6 border border-light-border shadow-sm">
+                <h2 className="text-lg font-bold text-light-text-primary mb-2">
                   Select Your Skills
                 </h2>
-                <p className="text-tg-hint text-sm mb-6">
+                <p className="text-light-text-muted text-sm mb-6">
                   Choose the skills that best represent your expertise
                 </p>
                 
@@ -235,10 +235,10 @@ export default function ProfilePage() {
                       key={skill.id}
                       type="button"
                       onClick={() => toggleSkill(skill.id)}
-                      className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                      className={`px-4 py-2.5 rounded-2xl text-sm font-bold transition-all ${
                         selectedSkills.includes(skill.id)
-                          ? "bg-gradient-to-r from-tg-button to-tg-button/80 text-tg-button-text shadow-lg"
-                          : "bg-tg-bg/50 border border-white/10 text-tg-text hover:bg-tg-secondary/50"
+                          ? "bg-brand-yellow text-black shadow-md"
+                          : "bg-light-bg border border-light-border text-light-text-primary hover:border-brand-yellow"
                       }`}
                     >
                       <span className="mr-1.5">{skill.icon}</span>
@@ -247,7 +247,7 @@ export default function ProfilePage() {
                   ))}
                 </div>
                 {selectedSkills.length === 0 && (
-                  <p className="text-tg-hint text-sm mt-4">
+                  <p className="text-light-text-muted text-sm mt-4">
                     Select at least one skill to continue
                   </p>
                 )}
@@ -256,7 +256,7 @@ export default function ProfilePage() {
               <button
                 type="button"
                 onClick={prevStep}
-                className="w-full py-3 bg-tg-secondary/50 text-tg-text rounded-xl font-medium"
+                className="w-full py-3.5 bg-light-border text-light-text-primary rounded-2xl font-bold"
               >
                 Back
               </button>
@@ -265,20 +265,20 @@ export default function ProfilePage() {
 
           {step === 3 && (
             <div className="space-y-6">
-              <div className="bg-tg-secondary/30 backdrop-blur-md rounded-2xl p-6 border border-white/10">
-                <h2 className="text-lg font-semibold text-tg-text mb-4">
+              <div className="bg-light-surface rounded-3xl p-6 border border-light-border shadow-sm">
+                <h2 className="text-lg font-bold text-light-text-primary mb-4">
                   Portfolio (Optional)
                 </h2>
                 
                 <div>
-                  <label className="block text-sm font-medium text-tg-text mb-2">
+                  <label className="block text-sm font-bold text-light-text-primary mb-2">
                     Portfolio Link
                   </label>
                   <div className="relative">
-                    <LinkIcon className="absolute left-3 top-3 w-5 h-5 text-tg-hint" />
+                    <LinkIcon className="absolute left-3 top-3 w-5 h-5 text-light-text-muted" />
                     <input
                       {...register("portfolioLink")}
-                      className="w-full pl-10 p-3 bg-tg-bg/50 border border-white/10 rounded-xl text-tg-text focus:outline-none focus:ring-2 focus:ring-tg-button"
+                      className="w-full pl-10 p-3.5 bg-light-bg border border-light-border rounded-2xl text-light-text-primary focus:outline-none focus:ring-2 focus:ring-brand-yellow"
                       placeholder="https://dribbble.com/yourname"
                     />
                   </div>
@@ -290,14 +290,14 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-tg-button/20 to-tg-button/5 backdrop-blur-md rounded-2xl p-6 border border-tg-button/20">
-                <h3 className="font-semibold text-tg-text mb-4">Profile Preview</h3>
+              <div className="bg-brand-yellow/10 rounded-3xl p-6 border border-brand-yellow/30">
+                <h3 className="font-bold text-light-text-primary mb-4">Profile Preview</h3>
                 <div className="space-y-2">
-                  <p className="text-tg-text">
-                    <span className="text-tg-hint">Name:</span> {user?.first_name}
+                  <p className="text-light-text-primary">
+                    <span className="text-light-text-muted">Name:</span> {user?.first_name}
                   </p>
-                  <p className="text-tg-text">
-                    <span className="text-tg-hint">Title:</span> {"" /* will show from form */}
+                  <p className="text-light-text-primary">
+                    <span className="text-light-text-muted">Title:</span> {""}
                   </p>
                   <div className="flex flex-wrap gap-2 mt-3">
                     {selectedSkills.map((skillId) => {
@@ -305,7 +305,7 @@ export default function ProfilePage() {
                       return (
                         <span 
                           key={skillId} 
-                          className="px-2 py-1 bg-tg-button/20 text-tg-button text-xs rounded-full"
+                          className="px-2 py-1 bg-brand-yellow/20 text-brand-yellow text-xs font-bold rounded-full"
                         >
                           {skill?.label}
                         </span>
@@ -318,7 +318,7 @@ export default function ProfilePage() {
               <button
                 type="button"
                 onClick={prevStep}
-                className="w-full py-3 bg-tg-secondary/50 text-tg-text rounded-xl font-medium"
+                className="w-full py-3.5 bg-light-border text-light-text-primary rounded-2xl font-bold"
               >
                 Back
               </button>
@@ -326,10 +326,10 @@ export default function ProfilePage() {
           )}
 
           {isSubmitting && (
-            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
-              <div className="bg-tg-bg p-6 rounded-2xl flex items-center gap-3">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-tg-button"></div>
-                <span className="text-tg-text">Creating profile...</span>
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+              <div className="bg-light-surface p-6 rounded-3xl flex items-center gap-3">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-brand-yellow"></div>
+                <span className="text-light-text-primary font-bold">Creating profile...</span>
               </div>
             </div>
           )}
