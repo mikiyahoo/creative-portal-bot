@@ -5,7 +5,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter, useParams } from "next/navigation";
-import { ArrowLeft, Plus, Minus, Info, MessageCircle } from "lucide-react";
+import { ArrowLeft, Plus, Minus, Info, MessageCircle, Building2, DollarSign, Briefcase, MapPin } from "lucide-react";
 import { useTelegram } from "@/hooks/useTelegram";
 
 const applySchema = z.object({
@@ -25,6 +25,8 @@ interface Job {
   description: string;
   employerName: string;
   deadline: string;
+  jobType?: string;
+  location?: string;
 }
 
 export default function ApplyPage() {
@@ -75,7 +77,7 @@ export default function ApplyPage() {
       const response = await fetch(`/api/jobs/${params.jobId}`);
       if (response.ok) {
         const data = await response.json();
-        setJob(data.jobs?.[0] || data);
+        setJob(data.jobs?.[0] || null);
       }
     } catch (error) {
       console.error("Error fetching job:", error);
@@ -104,9 +106,12 @@ export default function ApplyPage() {
       if (response.ok) {
         tg.showAlert("Application submitted successfully! We'll be in touch soon.");
         router.push("/jobs");
+      } else {
+        tg.showAlert("Failed to submit. Please try again.");
       }
     } catch (error) {
       console.error("Error submitting application:", error);
+      tg.showAlert("Failed to submit. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -126,9 +131,16 @@ export default function ApplyPage() {
     };
   }, [tg, handleSubmit]);
 
+  const formatJobType = (type?: string) => {
+    if (type === "remote") return "Remote";
+    if (type === "hybrid") return "Hybrid";
+    if (type === "onsite") return "On-site";
+    return "Full-time";
+  };
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-light-bg p-6 flex items-center justify-center">
+      <div className="min-h-screen bg-light-bg flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-yellow"></div>
       </div>
     );
@@ -136,80 +148,109 @@ export default function ApplyPage() {
 
   if (!job) {
     return (
-      <div className="min-h-screen bg-light-bg p-6 flex items-center justify-center">
-        <p className="text-light-text-muted">Job not found</p>
+      <div className="min-h-screen bg-light-bg flex items-center justify-center">
+        <div className="text-center p-6">
+          <p className="text-light-text-muted mb-4">Job not found</p>
+          <button 
+            onClick={() => router.push("/jobs")}
+            className="text-brand-yellow font-bold"
+          >
+            Back to Jobs
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-light-bg pb-24">
-      <div className="max-w-md mx-auto p-6">
-        <div className="flex items-center gap-2 mb-6">
+    <div className="min-h-screen bg-light-bg pb-28">
+      <div className="max-w-md mx-auto">
+        <div className="flex items-center gap-2 p-4">
           <button
             onClick={() => router.back()}
             className="p-2 hover:bg-light-border rounded-full transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-light-text-primary" />
           </button>
-          <h1 className="text-xl font-extrabold text-light-text-primary uppercase">Apply Now</h1>
+          <h1 className="text-lg font-bold text-light-text-primary">Job Details</h1>
         </div>
 
-        <div className="bg-light-surface rounded-3xl p-6 border border-light-border mb-6">
-          <h2 className="font-extrabold text-light-text-primary text-lg uppercase mb-2">{job.title}</h2>
-          <p className="text-light-text-muted text-sm mb-2">{job.employerName}</p>
-          <p className="text-brand-yellow font-bold">{job.budget}</p>
-        </div>
+        <div className="px-4 pb-20">
+          <div className="bg-black rounded-2xl p-5 mb-4 border border-white/10">
+            <h2 className="font-bold text-white text-lg mb-2">{job.title}</h2>
+            <div className="flex items-center gap-2 text-white/60 text-sm mb-4">
+              <Building2 className="w-4 h-4" />
+              <span>{job.employerName}</span>
+            </div>
+            
+            <div className="grid grid-cols-3 gap-3">
+              <div className="bg-white/5 rounded-xl p-3 text-center">
+                <DollarSign className="w-5 h-5 text-brand-yellow mx-auto mb-1" />
+                <p className="text-brand-yellow font-bold text-sm">{job.budget}</p>
+              </div>
+              <div className="bg-white/5 rounded-xl p-3 text-center">
+                <Briefcase className="w-5 h-5 text-brand-yellow mx-auto mb-1" />
+                <p className="text-white text-xs">{formatJobType(job.jobType)}</p>
+              </div>
+              <div className="bg-white/5 rounded-xl p-3 text-center">
+                <MapPin className="w-5 h-5 text-brand-yellow mx-auto mb-1" />
+                <p className="text-white text-xs">{job.location || "N/A"}</p>
+              </div>
+            </div>
+          </div>
 
-        <form className="space-y-6">
-          <div className="bg-light-surface rounded-3xl p-6 border border-light-border">
-            <label className="font-extrabold text-light-text-primary block mb-2 uppercase">
+          <div className="bg-light-surface rounded-2xl p-5 border border-light-border mb-4">
+            <h3 className="font-bold text-light-text-primary mb-3">Description</h3>
+            <p className="text-light-text-secondary text-sm leading-relaxed">
+              {job.description}
+            </p>
+          </div>
+
+          <div className="bg-light-surface rounded-2xl p-5 border border-light-border">
+            <label className="font-bold text-light-text-primary block mb-3">
               Cover Letter
             </label>
             <div className="relative">
               <textarea
                 {...register("coverLetter")}
-                className="w-full rounded-2xl border border-light-border p-4 h-40 focus:ring-2 focus:ring-brand-yellow focus:border-brand-yellow resize-none text-light-text-primary bg-light-bg placeholder:text-light-text-muted"
-                placeholder="Tell the employer why you're the perfect fit for this role..."
+                className="w-full rounded-xl border border-light-border p-3 h-32 focus:ring-2 focus:ring-brand-yellow focus:border-brand-yellow resize-none text-light-text-primary bg-light-bg placeholder:text-light-text-muted text-sm"
+                placeholder="Tell the employer why you're the perfect fit..."
               />
-              <span className={`absolute bottom-3 right-4 text-xs ${charactersLeft < 100 ? "text-red-500" : "text-light-text-muted"}`}>
-                {charactersLeft} Characters left
+              <span className={`absolute bottom-2 right-3 text-xs ${charactersLeft < 100 ? "text-red-500" : "text-light-text-muted"}`}>
+                {charactersLeft} left
               </span>
             </div>
             {errors.coverLetter && (
-              <p className="text-red-500 text-sm mt-1">{errors.coverLetter.message}</p>
+              <p className="text-red-500 text-xs mt-1">{errors.coverLetter.message}</p>
             )}
           </div>
 
-          <div className="bg-brand-yellow/10 border border-brand-yellow/30 rounded-2xl p-4">
+          <div className="bg-brand-yellow/10 border border-brand-yellow/30 rounded-xl p-4 mt-4">
             <div className="flex items-start gap-3">
-              <Info className="w-5 h-5 text-brand-yellow mt-0.5" />
-              <div>
-                <p className="font-bold text-brand-yellow text-sm">Privacy Tip</p>
-                <p className="text-light-text-muted text-xs mt-1">
-                  Make sure your Telegram username is set and your privacy settings allow others to see it. Go to Settings → Privacy → Telegram Username.
-                </p>
-              </div>
+              <Info className="w-4 h-4 text-brand-yellow mt-0.5 flex-shrink-0" />
+              <p className="text-light-text-muted text-xs">
+                Make sure your Telegram username is set in Settings → Privacy → Telegram Username.
+              </p>
             </div>
           </div>
 
-          <div className="bg-light-surface rounded-3xl p-6 border border-light-border">
-            <label className="font-extrabold text-light-text-primary block mb-4 uppercase">
-              Your Telegram Username
+          <div className="bg-light-surface rounded-2xl p-4 border border-light-border mt-4">
+            <label className="font-bold text-light-text-primary block mb-3">
+              Telegram Username
             </label>
             <div className="relative">
-              <MessageCircle className="absolute left-3 top-3 w-5 h-5 text-brand-yellow" />
+              <MessageCircle className="absolute left-3 top-2.5 w-4 h-4 text-brand-yellow" />
               <input
                 {...register("telegramUsername")}
-                className="w-full pl-10 p-3 rounded-2xl border border-light-border focus:ring-2 focus:ring-brand-yellow focus:border-brand-yellow text-light-text-primary bg-light-bg placeholder:text-light-text-muted"
+                className="w-full pl-9 p-2.5 rounded-xl border border-light-border focus:ring-2 focus:ring-brand-yellow text-light-text-primary bg-light-bg placeholder:text-light-text-muted text-sm"
                 placeholder="@username"
               />
             </div>
           </div>
 
-          <div className="bg-light-surface rounded-3xl p-6 border border-light-border">
-            <div className="flex items-center justify-between mb-4">
-              <label className="font-extrabold text-light-text-primary uppercase">
+          <div className="bg-light-surface rounded-2xl p-4 border border-light-border mt-4">
+            <div className="flex items-center justify-between mb-3">
+              <label className="font-bold text-light-text-primary text-sm">
                 Portfolio Links
               </label>
               {fields.length < 5 && (
@@ -219,20 +260,20 @@ export default function ApplyPage() {
                     tg?.HapticFeedback?.impactOccurred("light");
                     append({ url: "" });
                   }}
-                  className="flex items-center gap-1 text-brand-yellow text-sm font-bold"
+                  className="flex items-center gap-1 text-brand-yellow text-xs font-bold"
                 >
-                  <Plus className="w-4 h-4" />
-                  Add more
+                  <Plus className="w-3 h-3" />
+                  Add
                 </button>
               )}
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-2">
               {fields.map((field, index) => (
                 <div key={field.id} className="flex gap-2">
                   <input
                     {...register(`portfolioLinks.${index}.url` as const)}
-                    className="flex-1 p-3 rounded-2xl border border-light-border focus:ring-2 focus:ring-brand-yellow focus:border-brand-yellow text-light-text-primary bg-light-bg placeholder:text-light-text-muted"
+                    className="flex-1 p-2.5 rounded-xl border border-light-border focus:ring-2 focus:ring-brand-yellow text-light-text-primary bg-light-bg placeholder:text-light-text-muted text-sm"
                     placeholder="https://dribbble.com/yourwork"
                   />
                   {index > 0 && (
@@ -242,28 +283,25 @@ export default function ApplyPage() {
                         tg?.HapticFeedback?.impactOccurred("light");
                         remove(index);
                       }}
-                      className="p-3 text-red-500 hover:bg-red-500/10 rounded-2xl transition-colors"
+                      className="p-2.5 text-red-500 hover:bg-red-500/10 rounded-xl transition-colors"
                     >
-                      <Minus className="w-5 h-5" />
+                      <Minus className="w-4 h-4" />
                     </button>
                   )}
                 </div>
               ))}
             </div>
-            {errors.portfolioLinks && (
-              <p className="text-red-500 text-sm mt-2">{errors.portfolioLinks.message || errors.portfolioLinks.root?.message}</p>
-            )}
           </div>
 
           {isSubmitting && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-              <div className="bg-light-surface p-6 rounded-3xl flex items-center gap-3 border border-light-border">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-brand-yellow"></div>
-                <span className="text-light-text-primary font-bold">Submitting...</span>
+              <div className="bg-light-surface p-4 rounded-2xl flex items-center gap-3">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-brand-yellow"></div>
+                <span className="text-light-text-primary text-sm">Submitting...</span>
               </div>
             </div>
           )}
-        </form>
+        </div>
       </div>
     </div>
   );

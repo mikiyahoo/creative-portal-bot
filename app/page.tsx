@@ -85,17 +85,17 @@ export default function Home() {
 
   if (!isReady || checking || authenticating) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-background p-6">
-        <div className="w-16 h-16 rounded-full bg-brand-yellow/10 flex items-center justify-center mb-6">
-          <Loader2 className="w-8 h-8 text-brand-yellow animate-spin" />
+      <div className="h-screen flex flex-col items-center justify-center bg-background p-4">
+        <div className="w-12 h-12 rounded-full bg-brand-yellow/10 flex items-center justify-center mb-4">
+          <Loader2 className="w-6 h-6 text-brand-yellow animate-spin" />
         </div>
-        <p className="text-text-primary font-bold text-lg">
-          {authenticating ? "Authenticating with Telegram..." : "Loading..."}
+        <p className="text-text-primary font-bold text-base">
+          {authenticating ? "Authenticating..." : "Loading..."}
         </p>
         {authenticating && (
-          <p className="text-text-muted text-sm mt-3 flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-brand-yellow" />
-            Secure connection established
+          <p className="text-text-muted text-xs mt-2 flex items-center gap-1">
+            <ShieldCheck className="w-3 h-3 text-brand-yellow" />
+            Secure connection
           </p>
         )}
       </div>
@@ -103,46 +103,46 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-md mx-auto">
-        <div className="text-center mb-12 pt-6">
-          <div className="inline-flex p-6 bg-obsidian rounded-3xl mb-6 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,184,0,0.05)]">
-            <Palette className="w-14 h-14 text-brand-yellow" />
+    <div className="h-screen bg-background overflow-hidden">
+      <div className="h-full flex flex-col max-w-md mx-auto px-4 py-4">
+        <div className="text-center mb-4 pt-2">
+          <div className="inline-flex p-4 bg-obsidian rounded-2xl mb-3 border border-white/10">
+            <Palette className="w-10 h-10 text-brand-yellow" />
           </div>
-          <h1 className="text-4xl font-extrabold text-text-primary uppercase tracking-widest mb-3">
+          <h1 className="text-xl font-extrabold text-text-primary">
             Creative Portal
           </h1>
-          <p className="text-text-muted text-lg">
-            {user ? `Welcome back, ${user.first_name}!` : "Your creative journey starts here"}
+          <p className="text-text-muted text-sm mt-1">
+            {user ? `Welcome, ${user.first_name}!` : "Your creative journey starts here"}
           </p>
         </div>
 
-        <div className="space-y-4">
+        <div className="flex-1 flex flex-col gap-3 justify-center">
           <button
             onClick={() => handleRoleSelect("seeker")}
-            className="w-full p-6 bg-obsidian rounded-3xl border border-white/10 flex items-center gap-5 transition-all active:scale-[0.98] hover:border-brand-yellow/30 hover:shadow-[0_0_20px_rgba(255,184,0,0.1)]"
+            className="flex-1 bg-obsidian rounded-2xl border border-white/10 flex items-center gap-4 p-4 transition-all active:scale-[0.98] hover:border-brand-yellow/30"
           >
-            <div className="p-4 bg-brand-yellow rounded-2xl shadow-[0_0_15px_rgba(255,184,0,0.3)]">
-              <Palette className="w-8 h-8 text-black" />
+            <div className="p-3 bg-brand-yellow rounded-xl">
+              <Palette className="w-6 h-6 text-black" />
             </div>
             <div className="text-left">
-              <h2 className="text-lg font-bold text-text-primary">I am a Creative</h2>
-              <p className="text-text-muted text-sm">
-                Build your portfolio & find jobs
+              <h2 className="text-base font-bold text-text-primary">I am a Creative</h2>
+              <p className="text-text-muted text-xs">
+                Build portfolio & find jobs
               </p>
             </div>
           </button>
 
           <button
             onClick={() => handleRoleSelect("employer")}
-            className="w-full p-6 bg-obsidian rounded-3xl border border-white/10 flex items-center gap-5 transition-all active:scale-[0.98] hover:border-brand-yellow/30 hover:shadow-[0_0_20px_rgba(255,184,0,0.1)]"
+            className="flex-1 bg-obsidian rounded-2xl border border-white/10 flex items-center gap-4 p-4 transition-all active:scale-[0.98] hover:border-brand-yellow/30"
           >
-            <div className="p-4 bg-brand-yellow rounded-2xl shadow-[0_0_15px_rgba(255,184,0,0.3)]">
-              <Briefcase className="w-8 h-8 text-black" />
+            <div className="p-3 bg-brand-yellow rounded-xl">
+              <Briefcase className="w-6 h-6 text-black" />
             </div>
             <div className="text-left">
-              <h2 className="text-lg font-bold text-text-primary">I am an Employer</h2>
-              <p className="text-text-muted text-sm">
+              <h2 className="text-base font-bold text-text-primary">I am an Employer</h2>
+              <p className="text-text-muted text-xs">
                 Post jobs & discover talent
               </p>
             </div>
