@@ -5,34 +5,58 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Eye, Send } from "lucide-react";
+import { ArrowLeft, Eye, Send, Sparkles, Globe, Home, Building2 } from "lucide-react";
 import { useTelegram } from "@/hooks/useTelegram";
 
 const jobSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters"),
+  discipline: z.string().min(1, "Select a discipline"),
   budget: z.string().min(1, "Budget is required"),
-  description: z.string().min(20, "Description must be at least 20 characters"),
+  jobType: z.enum(["remote", "hybrid", "onsite"]),
+  description: z.string().min(50, "Description must be at least 50 characters"),
   deadline: z.string().min(1, "Deadline is required"),
+}).refine((data) => {
+  const deadline = new Date(data.deadline);
+  return deadline > new Date();
+}, {
+  message: "Deadline must be in the future",
+  path: ["deadline"],
 });
 
 type JobFormData = z.infer<typeof jobSchema>;
+
+const DISCIPLINES = [
+  { id: "ui-ux", label: "UI/UX Design" },
+  { id: "branding", label: "Branding & Identity" },
+  { id: "illustration", label: "Illustration" },
+  { id: "motion", label: "Motion Graphics" },
+  { id: "3d", label: "3D Modeling" },
+  { id: "video", label: "Video Production" },
+  { id: "web", label: "Web Development" },
+  { id: "photography", label: "Photography" },
+];
 
 export default function PostJobPage() {
   const router = useRouter();
   const { tg, user } = useTelegram();
   const [isPreview, setIsPreview] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isPinned, setIsPinned] = useState(false);
+  const [broadcastToChannel, setBroadcastToChannel] = useState(false);
 
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<JobFormData>({
     resolver: zodResolver(jobSchema),
     defaultValues: {
       title: "",
+      discipline: "",
       budget: "",
+      jobType: "remote",
       description: "",
       deadline: "",
     },
@@ -62,6 +86,8 @@ export default function PostJobPage() {
         body: JSON.stringify({
           ...data,
           employerTelegramId: user?.id,
+          isPinned,
+          broadcastToChannel,
         }),
       });
 
@@ -77,36 +103,44 @@ export default function PostJobPage() {
   };
 
   useEffect(() => {
-    if (tg && !isPreview) {
+    if (!tg) return;
+
+    if (!isPreview) {
       tg.MainButton.setText("Preview");
       tg.MainButton.show();
       tg.MainButton.onClick(() => {
-        if (tg?.HapticFeedback) {
-          tg.HapticFeedback.impactOccurred("light");
-        }
+        tg.HapticFeedback?.impactOccurred("light");
         setIsPreview(true);
       });
-    } else if (tg && isPreview) {
+    } else {
       tg.MainButton.setText("Post Job");
       tg.MainButton.onClick(() => {
         handleSubmit(onSubmit)();
       });
     }
+
+    return () => {
+      tg.MainButton.hide();
+    };
   }, [isPreview, tg, handleSubmit]);
 
   if (isPreview) {
+    const jobTypeLabels = {
+      remote: "Remote",
+      hybrid: "Hybrid",
+      onsite: "On-site",
+    };
+
     return (
-      <div className="min-h-screen bg-tg-bg p-4 pb-20">
+      <div className="min-h-screen bg-tg-bg p-4 pb-24">
         <div className="max-w-md mx-auto">
           <div className="flex items-center justify-between mb-6">
             <button
               onClick={() => {
-                if (tg?.HapticFeedback) {
-                  tg.HapticFeedback.impactOccurred("light");
-                }
+                tg?.HapticFeedback?.impactOccurred("light");
                 setIsPreview(false);
               }}
-              className="p-2 hover:bg-tg-secondary rounded-lg"
+              className="p-2 hover:bg-tg-secondary/50 rounded-lg transition-colors"
             >
               <ArrowLeft className="w-5 h-5 text-tg-text" />
             </button>
@@ -114,18 +148,41 @@ export default function PostJobPage() {
             <div className="w-9" />
           </div>
 
-          <div className="bg-tg-secondary rounded-xl p-6">
-            <h2 className="text-2xl font-bold text-tg-text mb-2">
-              {watchedData.title}
-            </h2>
+          <div className="bg-tg-secondary/50 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+            <div className="flex items-start justify-between mb-4">
+              <h2 className="text-2xl font-bold text-tg-text">
+                {watchedData.title}
+              </h2>
+              {isPinned && (
+                <span className="bg-tg-button/20 text-tg-button text-xs px-2 py-1 rounded-full">
+                  Pinned
+                </span>
+              )}
+            </div>
+            
+            <div className="flex items-center gap-4 text-sm text-tg-hint mb-4">
+              <span className="px-3 py-1 bg-tg-button/10 rounded-full text-tg-button">
+                {DISCIPLINES.find(d => d.id === watchedData.discipline)?.label || watchedData.discipline}
+              </span>
+              <span className="flex items-center gap-1">
+                {watchedData.jobType === "remote" && <Globe className="w-4 h-4" />}
+                {watchedData.jobType === "hybrid" && <Home className="w-4 h-4" />}
+                {watchedData.jobType === "onsite" && <Building2 className="w-4 h-4" />}
+                {jobTypeLabels[watchedData.jobType as keyof typeof jobTypeLabels]}
+              </span>
+            </div>
+
             <p className="text-tg-button font-semibold text-lg mb-4">
               {watchedData.budget}
             </p>
-            <p className="text-tg-text whitespace-pre-wrap">{watchedData.description}</p>
-            <div className="mt-4 pt-4 border-t border-tg-hint">
-              <p className="text-tg-hint text-sm">
-                Deadline: {watchedData.deadline}
-              </p>
+            
+            <p className="text-tg-text whitespace-pre-wrap mb-4">{watchedData.description}</p>
+            
+            <div className="pt-4 border-t border-white/10 flex justify-between text-sm">
+              <span className="text-tg-hint">Deadline: {watchedData.deadline}</span>
+              {broadcastToChannel && (
+                <span className="text-tg-button">Posted to Channel</span>
+              )}
             </div>
           </div>
 
@@ -138,80 +195,177 @@ export default function PostJobPage() {
   }
 
   return (
-    <div className="min-h-screen bg-tg-bg p-4 pb-20">
+    <div className="min-h-screen bg-tg-bg p-4 pb-24">
       <div className="max-w-md mx-auto">
         <div className="flex items-center gap-2 mb-6">
           <button
             onClick={() => router.back()}
-            className="p-2 hover:bg-tg-secondary rounded-lg"
+            className="p-2 hover:bg-tg-secondary/50 rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-tg-text" />
           </button>
           <h1 className="text-xl font-bold text-tg-text">Post a Job</h1>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-tg-text mb-2">
-              Job Title
-            </label>
-            <input
-              {...register("title")}
-              className="w-full p-3 bg-tg-secondary rounded-lg text-tg-text focus:outline-none focus:ring-2 focus:ring-tg-button"
-              placeholder="e.g., Logo Design for Startup"
-            />
-            {errors.title && (
-              <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
-            )}
+        <form className="space-y-5">
+          <div className="bg-tg-secondary/30 backdrop-blur-md rounded-2xl p-5 border border-white/10 space-y-4">
+            <h2 className="font-semibold text-tg-text flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-tg-button" />
+              Job Details
+            </h2>
+
+            <div>
+              <label className="block text-sm font-medium text-tg-text mb-2">
+                Job Title
+              </label>
+              <input
+                {...register("title")}
+                className="w-full p-3 bg-tg-bg/50 border border-white/10 rounded-xl text-tg-text focus:outline-none focus:ring-2 focus:ring-tg-button"
+                placeholder="e.g., Senior UI Designer"
+              />
+              {errors.title && (
+                <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-tg-text mb-2">
+                Creative Discipline
+              </label>
+              <select
+                {...register("discipline")}
+                className="w-full p-3 bg-tg-bg/50 border border-white/10 rounded-xl text-tg-text focus:outline-none focus:ring-2 focus:ring-tg-button"
+              >
+                <option value="">Select a discipline</option>
+                {DISCIPLINES.map((d) => (
+                  <option key={d.id} value={d.id}>{d.label}</option>
+                ))}
+              </select>
+              {errors.discipline && (
+                <p className="text-red-500 text-sm mt-1">{errors.discipline.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-tg-text mb-2">
+                Budget Range (ETB)
+              </label>
+              <input
+                {...register("budget")}
+                className="w-full p-3 bg-tg-bg/50 border border-white/10 rounded-xl text-tg-text focus:outline-none focus:ring-2 focus:ring-tg-button"
+                placeholder="e.g., $500 - $1,000"
+              />
+              {errors.budget && (
+                <p className="text-red-500 text-sm mt-1">{errors.budget.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-tg-text mb-2">
+                Job Type
+              </label>
+              <div className="flex gap-2">
+                {(["remote", "hybrid", "onsite"] as const).map((type) => (
+                  <button
+                    key={type}
+                    type="button"
+                    onClick={() => setValue("jobType", type)}
+                    className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                      watchedData.jobType === type
+                        ? "bg-tg-button text-tg-button-text"
+                        : "bg-tg-bg/50 border border-white/10 text-tg-text"
+                    }`}
+                  >
+                    {type === "remote" && <Globe className="w-4 h-4 inline mr-1" />}
+                    {type === "hybrid" && <Home className="w-4 h-4 inline mr-1" />}
+                    {type === "onsite" && <Building2 className="w-4 h-4 inline mr-1" />}
+                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-tg-text mb-2">
-              Budget/Salary
-            </label>
-            <input
-              {...register("budget")}
-              className="w-full p-3 bg-tg-secondary rounded-lg text-tg-text focus:outline-none focus:ring-2 focus:ring-tg-button"
-              placeholder="e.g., $500 - $1000"
-            />
-            {errors.budget && (
-              <p className="text-red-500 text-sm mt-1">{errors.budget.message}</p>
-            )}
+          <div className="bg-tg-secondary/30 backdrop-blur-md rounded-2xl p-5 border border-white/10 space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-tg-text mb-2">
+                Description
+              </label>
+              <textarea
+                {...register("description")}
+                className="w-full p-3 bg-tg-bg/50 border border-white/10 rounded-xl text-tg-text focus:outline-none focus:ring-2 focus:ring-tg-button h-40 resize-none"
+                placeholder="Describe the role, requirements, and what makes this opportunity exciting..."
+              />
+              {errors.description && (
+                <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-tg-text mb-2">
+                Deadline
+              </label>
+              <input
+                {...register("deadline")}
+                type="date"
+                className="w-full p-3 bg-tg-bg/50 border border-white/10 rounded-xl text-tg-text focus:outline-none focus:ring-2 focus:ring-tg-button"
+              />
+              {errors.deadline && (
+                <p className="text-red-500 text-sm mt-1">{errors.deadline.message}</p>
+              )}
+            </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-tg-text mb-2">
-              Description
+          <div className="bg-tg-secondary/30 backdrop-blur-md rounded-2xl p-5 border border-white/10 space-y-4">
+            <h2 className="font-semibold text-tg-text">Premium Features</h2>
+            
+            <label className="flex items-center justify-between p-3 bg-tg-bg/30 rounded-xl cursor-pointer">
+              <div>
+                <span className="text-tg-text font-medium">Pin to Top</span>
+                <p className="text-tg-hint text-xs">Keep your job at the top of the feed</p>
+              </div>
+              <div
+                onClick={() => {
+                  tg?.HapticFeedback?.impactOccurred("light");
+                  setIsPinned(!isPinned);
+                }}
+                className={`w-12 h-6 rounded-full transition-colors ${
+                  isPinned ? "bg-tg-button" : "bg-tg-secondary"
+                }`}
+              >
+                <div className={`w-5 h-5 bg-white rounded-full shadow transition-transform ${
+                  isPinned ? "translate-x-6" : "translate-x-0.5"
+                } mt-0.5`} />
+              </div>
             </label>
-            <textarea
-              {...register("description")}
-              className="w-full p-3 bg-tg-secondary rounded-lg text-tg-text focus:outline-none focus:ring-2 focus:ring-tg-button h-40"
-              placeholder="Describe the job requirements..."
-            />
-            {errors.description && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.description.message}
-              </p>
-            )}
-          </div>
 
-          <div>
-            <label className="block text-sm font-medium text-tg-text mb-2">
-              Deadline
+            <label className="flex items-center justify-between p-3 bg-tg-bg/30 rounded-xl cursor-pointer">
+              <div>
+                <span className="text-tg-text font-medium">Broadcast to Channel</span>
+                <p className="text-tg-hint text-xs">Share to @CreativePortalJobs</p>
+              </div>
+              <div
+                onClick={() => {
+                  tg?.HapticFeedback?.impactOccurred("light");
+                  setBroadcastToChannel(!broadcastToChannel);
+                }}
+                className={`w-12 h-6 rounded-full transition-colors ${
+                  broadcastToChannel ? "bg-tg-button" : "bg-tg-secondary"
+                }`}
+              >
+                <div className={`w-5 h-5 bg-white rounded-full shadow transition-transform ${
+                  broadcastToChannel ? "translate-x-6" : "translate-x-0.5"
+                } mt-0.5`} />
+              </div>
             </label>
-            <input
-              {...register("deadline")}
-              type="date"
-              className="w-full p-3 bg-tg-secondary rounded-lg text-tg-text focus:outline-none focus:ring-2 focus:ring-tg-button"
-            />
-            {errors.deadline && (
-              <p className="text-red-500 text-sm mt-1">{errors.deadline.message}</p>
-            )}
           </div>
 
           {isSubmitting && (
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-tg-button"></div>
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
+              <div className="bg-tg-bg p-6 rounded-2xl flex items-center gap-3">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-tg-button"></div>
+                <span className="text-tg-text">Posting job...</span>
+              </div>
             </div>
           )}
         </form>
