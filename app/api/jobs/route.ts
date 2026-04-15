@@ -133,7 +133,51 @@ export async function GET(request: NextRequest, { params }: { params: { jobId?: 
   return NextResponse.json({ jobs: filteredJobs });
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest, { params }: { params: { jobId?: string } }) {
+  const jobId = params?.jobId;
+
+  if (jobId === "apply") {
+    try {
+      const body = await request.json();
+      const { jobId: appliedJobId, telegramId, coverLetter, portfolioLinks, telegramUsername } = body;
+
+      if (!appliedJobId || !telegramId || !coverLetter) {
+        return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+      }
+
+      const job = jobs.find((j) => j.id === appliedJobId);
+      if (!job) {
+        return NextResponse.json({ error: "Job not found" }, { status: 404 });
+      }
+
+      job.applicants += 1;
+
+      const newApplicant: Applicant = {
+        id: Date.now().toString(),
+        fullName: `User ${telegramId}`,
+        professionalTitle: "Applicant",
+        bio: coverLetter,
+        skills: [],
+        portfolioLink: portfolioLinks?.[0]?.url || "",
+        telegramId,
+        appliedAt: new Date().toISOString(),
+        status: "pending",
+        jobId: appliedJobId,
+      };
+
+      applicants.push(newApplicant);
+
+      return NextResponse.json({ success: true, applicant: newApplicant }, { status: 201 });
+    } catch (error) {
+      console.error("Error submitting application:", error);
+      return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    }
+  }
+
+  if (jobId && jobId !== "apply") {
+    return NextResponse.json({ error: "Invalid route" }, { status: 404 });
+  }
+
   try {
     const body = await request.json();
     const { 
@@ -203,48 +247,4 @@ export async function PUT(request: NextRequest) {
   } catch (error) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
-}
-
-export async function POST(request: NextRequest, { params }: { params: { jobId?: string } }) {
-  const jobId = params?.jobId;
-
-  if (jobId === "apply") {
-    try {
-      const body = await request.json();
-      const { jobId: appliedJobId, telegramId, coverLetter, portfolioLinks, telegramUsername } = body;
-
-      if (!appliedJobId || !telegramId || !coverLetter) {
-        return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
-      }
-
-      const job = jobs.find((j) => j.id === appliedJobId);
-      if (!job) {
-        return NextResponse.json({ error: "Job not found" }, { status: 404 });
-      }
-
-      job.applicants += 1;
-
-      const newApplicant: Applicant = {
-        id: Date.now().toString(),
-        fullName: `User ${telegramId}`,
-        professionalTitle: "Applicant",
-        bio: coverLetter,
-        skills: [],
-        portfolioLink: portfolioLinks?.[0]?.url || "",
-        telegramId,
-        appliedAt: new Date().toISOString(),
-        status: "pending",
-        jobId: appliedJobId,
-      };
-
-      applicants.push(newApplicant);
-
-      return NextResponse.json({ success: true, applicant: newApplicant }, { status: 201 });
-    } catch (error) {
-      console.error("Error submitting application:", error);
-      return NextResponse.json({ error: "Internal server error" }, { status: 500 });
-    }
-  }
-
-  return NextResponse.json({ error: "Invalid route" }, { status: 404 });
 }
