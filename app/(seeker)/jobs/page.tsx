@@ -2,11 +2,12 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Search, RefreshCw } from "lucide-react";
+import { Search, RefreshCw, SlidersHorizontal } from "lucide-react";
 import { useTelegram } from "@/hooks/useTelegram";
 import { JobCard } from "@/components/ui/JobCard";
-import { JobFeedSkeleton, JobCardSkeleton } from "@/components/ui/Skeleton";
-import { EmptyState, LoadingState } from "@/components/ui/EmptyState";
+import { JobFeedSkeleton } from "@/components/ui/Skeleton";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { FilterModal, Filters } from "@/components/Shared/FilterModal";
 
 interface Job {
   id: string;
@@ -15,6 +16,12 @@ interface Job {
   description: string;
   deadline: string;
   employerName: string;
+  discipline?: string;
+  jobType?: string;
+  location?: string;
+  experience?: string;
+  createdAt?: string;
+  isPinned?: boolean;
 }
 
 export default function JobsPage() {
@@ -24,6 +31,12 @@ export default function JobsPage() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
+  const [filters, setFilters] = useState<Filters>({
+    jobType: [],
+    jobSite: [],
+    experience: [],
+  });
 
   const fetchJobs = useCallback(async (isRefresh = false) => {
     if (isRefresh) setRefreshing(true);
@@ -72,11 +85,36 @@ export default function JobsPage() {
     }
   }, [tg, loading]);
 
-  const filteredJobs = jobs.filter(
-    (job) =>
+  const applyFilters = (newFilters: Filters) => {
+    setFilters(newFilters);
+    tg?.HapticFeedback?.impactOccurred("light");
+  };
+
+  const filteredJobs = jobs.filter((job) => {
+    const matchesSearch = 
       job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      job.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+      job.description.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    if (!matchesSearch) return false;
+    
+    if (filters.jobType.length > 0) {
+      const jobTypeStr = job.jobType || "full-time";
+      const matchesType = filters.jobType.some(t => 
+        t.toLowerCase().includes(jobTypeStr.toLowerCase())
+      );
+      if (!matchesType) return false;
+    }
+    
+    if (filters.jobSite.length > 0) {
+      const jobSiteStr = job.jobType || "onsite";
+      const matchesSite = filters.jobSite.some(s => 
+        s.toLowerCase().includes(jobSiteStr.toLowerCase())
+      );
+      if (!matchesSite) return false;
+    }
+    
+    return true;
+  });
 
   const handleApply = async (jobId: string) => {
     try {
@@ -100,9 +138,9 @@ export default function JobsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-tg-bg p-4">
+      <div className="min-h-screen bg-background p-6">
         <div className="max-w-md mx-auto">
-          <h1 className="text-xl font-bold text-tg-text mb-6">Browse Jobs</h1>
+          <h1 className="text-xl font-bold text-text-primary mb-6">Browse Jobs</h1>
           <JobFeedSkeleton />
         </div>
       </div>
@@ -110,24 +148,35 @@ export default function JobsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-tg-bg p-4">
+    <div className="min-h-screen bg-background p-6">
       <div className="max-w-md mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl font-bold text-tg-text">Browse Jobs</h1>
+          <h1 className="text-xl font-bold text-text-primary">Browse Jobs</h1>
           {refreshing && (
-            <RefreshCw className="w-5 h-5 text-tg-button animate-spin" />
+            <RefreshCw className="w-5 h-5 text-primary animate-spin" />
           )}
         </div>
 
-        <div className="relative mb-4">
-          <Search className="absolute left-3 top-3 w-5 h-5 text-tg-hint" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 p-3 bg-tg-secondary/50 backdrop-blur-md border border-white/10 rounded-xl text-tg-text focus:outline-none focus:ring-2 focus:ring-tg-button"
-            placeholder="Search jobs..."
-          />
+        <div className="flex gap-2 mb-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-3 w-5 h-5 text-text-muted" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 p-3 bg-surface border border-gray-100 rounded-xl text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+              placeholder="Search jobs..."
+            />
+          </div>
+          <button
+            onClick={() => {
+              tg?.HapticFeedback?.impactOccurred("light");
+              setShowFilters(true);
+            }}
+            className="p-3 bg-surface border border-gray-100 rounded-xl hover:bg-gray-50 transition-colors"
+          >
+            <SlidersHorizontal className="w-5 h-5 text-text-secondary" />
+          </button>
         </div>
 
         {filteredJobs.length === 0 ? (
@@ -144,6 +193,12 @@ export default function JobsPage() {
           </div>
         )}
       </div>
+
+      <FilterModal
+        isOpen={showFilters}
+        onClose={() => setShowFilters(false)}
+        onApply={applyFilters}
+      />
     </div>
   );
 }
