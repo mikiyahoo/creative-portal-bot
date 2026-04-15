@@ -2,7 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
-import { Palette, Briefcase, Loader2, ShieldCheck } from "lucide-react";
+import Image from "next/image";
+import { Loader2, ShieldCheck } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { useTelegram } from "@/hooks/useTelegram";
 
@@ -106,13 +107,15 @@ export default function Home() {
     <div className="h-screen bg-background overflow-hidden">
       <div className="h-full flex flex-col max-w-md mx-auto px-4 py-4">
         <div className="text-center mb-4 pt-2">
-          <div className="inline-flex p-4 bg-obsidian rounded-2xl mb-3 border border-white/10">
-            <Palette className="w-10 h-10 text-brand-yellow" />
+          <div className="relative w-32 h-32 mx-auto mb-2">
+            <Image
+              src="/images/creative-portal-logo-white.png"
+              alt="Creative Portal"
+              fill
+              className="object-contain"
+            />
           </div>
-          <h1 className="text-xl font-extrabold text-text-primary">
-            Creative Portal
-          </h1>
-          <p className="text-text-muted text-sm mt-1">
+          <p className="text-text-muted text-sm">
             {user ? `Welcome, ${user.first_name}!` : "Your creative journey starts here"}
           </p>
         </div>
@@ -123,7 +126,9 @@ export default function Home() {
             className="flex-1 bg-obsidian rounded-2xl border border-white/10 flex items-center gap-4 p-4 transition-all active:scale-[0.98] hover:border-brand-yellow/30"
           >
             <div className="p-3 bg-brand-yellow rounded-xl">
-              <Palette className="w-6 h-6 text-black" />
+              <svg className="w-6 h-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
             </div>
             <div className="text-left">
               <h2 className="text-base font-bold text-text-primary">I am a Creative</h2>
@@ -138,7 +143,9 @@ export default function Home() {
             className="flex-1 bg-obsidian rounded-2xl border border-white/10 flex items-center gap-4 p-4 transition-all active:scale-[0.98] hover:border-brand-yellow/30"
           >
             <div className="p-3 bg-brand-yellow rounded-xl">
-              <Briefcase className="w-6 h-6 text-black" />
+              <svg className="w-6 h-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
             </div>
             <div className="text-left">
               <h2 className="text-base font-bold text-text-primary">I am an Employer</h2>
