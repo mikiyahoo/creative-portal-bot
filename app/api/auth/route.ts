@@ -9,6 +9,8 @@ interface TelegramUser {
   language_code?: string;
 }
 
+const usersDb = new Map<number, { role: string; registeredAt: string }>();
+
 function verifyTelegramInitData(
   initData: string,
   botToken: string
@@ -78,7 +80,10 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    return NextResponse.json({ user });
+    const existingUser = usersDb.get(user.id);
+    const role = existingUser?.role || null;
+    
+    return NextResponse.json({ user, role });
   } catch (error) {
     console.error("Auth error:", error);
     return NextResponse.json(
@@ -88,6 +93,56 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
-  return NextResponse.json({ error: "Method not allowed" }, { status: 405 });
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const telegramId = searchParams.get("telegramId");
+  
+  if (!telegramId) {
+    return NextResponse.json(
+      { error: "Missing telegramId" },
+      { status: 400 }
+    );
+  }
+  
+  const id = parseInt(telegramId, 10);
+  const userData = usersDb.get(id);
+  
+  if (userData) {
+    return NextResponse.json({ 
+      role: userData.role,
+      registered: true 
+    });
+  }
+  
+  return NextResponse.json({ 
+    role: null,
+    registered: false 
+  });
+}
+
+export async function PUT(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { telegramId, role } = body;
+    
+    if (!telegramId || !role) {
+      return NextResponse.json(
+        { error: "Missing telegramId or role" },
+        { status: 400 }
+      );
+    }
+    
+    usersDb.set(telegramId, {
+      role,
+      registeredAt: new Date().toISOString(),
+    });
+    
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Error saving user:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
 }

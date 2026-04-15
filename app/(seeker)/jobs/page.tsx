@@ -1,9 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Search, MapPin, DollarSign } from "lucide-react";
+import { Search, RefreshCw } from "lucide-react";
 import { useTelegram } from "@/hooks/useTelegram";
+import { JobCard } from "@/components/ui/JobCard";
+import { JobFeedSkeleton, JobCardSkeleton } from "@/components/ui/Skeleton";
+import { EmptyState, LoadingState } from "@/components/ui/EmptyState";
 
 interface Job {
   id: string;
@@ -19,7 +22,25 @@ export default function JobsPage() {
   const { tg, user } = useTelegram();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const fetchJobs = useCallback(async (isRefresh = false) => {
+    if (isRefresh) setRefreshing(true);
+    
+    try {
+      const response = await fetch("/api/jobs");
+      if (response.ok) {
+        const data = await response.json();
+        setJobs(data.jobs || []);
+      }
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (tg) {
@@ -27,25 +48,29 @@ export default function JobsPage() {
       tg.BackButton.onClick(() => {
         router.push("/");
       });
-    }
-  }, [tg, router]);
 
-  useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        const response = await fetch("/api/jobs");
-        if (response.ok) {
-          const data = await response.json();
-          setJobs(data.jobs || []);
-        }
-      } catch (error) {
-        console.error("Error fetching jobs:", error);
-      } finally {
-        setLoading(false);
+      tg.onEvent("mainButtonClicked", () => {
+        tg.HapticFeedback.impactOccurred("light");
+        fetchJobs(true);
+      });
+    }
+
+    fetchJobs();
+
+    return () => {
+      if (tg) {
+        tg.BackButton.hide();
+        tg.offEvent("mainButtonClicked", fetchJobs);
       }
     };
-    fetchJobs();
-  }, []);
+  }, [tg, router, fetchJobs]);
+
+  useEffect(() => {
+    if (tg && !loading) {
+      tg.MainButton.setText("Refresh");
+      tg.MainButton.show();
+    }
+  }, [tg, loading]);
 
   const filteredJobs = jobs.filter(
     (job) =>
@@ -53,17 +78,33 @@ export default function JobsPage() {
       job.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleJobClick = (jobId: string) => {
-    if (tg?.HapticFeedback) {
-      tg.HapticFeedback.impactOccurred("light");
+  const handleApply = async (jobId: string) => {
+    try {
+      const response = await fetch("/api/jobs/apply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          jobId,
+          telegramId: user?.id,
+        }),
+      });
+
+      if (response.ok) {
+        tg?.showAlert("Application submitted successfully!");
+      }
+    } catch (error) {
+      console.error("Error applying for job:", error);
+      tg?.showAlert("Failed to submit application. Please try again.");
     }
-    router.push(`/jobs/${jobId}`);
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-tg-bg">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-tg-button"></div>
+      <div className="min-h-screen bg-tg-bg p-4">
+        <div className="max-w-md mx-auto">
+          <h1 className="text-xl font-bold text-tg-text mb-6">Browse Jobs</h1>
+          <JobFeedSkeleton />
+        </div>
       </div>
     );
   }
@@ -71,14 +112,11 @@ export default function JobsPage() {
   return (
     <div className="min-h-screen bg-tg-bg p-4">
       <div className="max-w-md mx-auto">
-        <div className="flex items-center gap-2 mb-6">
-          <button
-            onClick={() => router.back()}
-            className="p-2 hover:bg-tg-secondary rounded-lg"
-          >
-            ←
-          </button>
+        <div className="flex items-center justify-between mb-6">
           <h1 className="text-xl font-bold text-tg-text">Browse Jobs</h1>
+          {refreshing && (
+            <RefreshCw className="w-5 h-5 text-tg-button animate-spin" />
+          )}
         </div>
 
         <div className="relative mb-4">
@@ -87,37 +125,21 @@ export default function JobsPage() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 p-3 bg-tg-secondary rounded-lg text-tg-text focus:outline-none focus:ring-2 focus:ring-tg-button"
+            className="w-full pl-10 p-3 bg-tg-secondary/50 backdrop-blur-md border border-white/10 rounded-xl text-tg-text focus:outline-none focus:ring-2 focus:ring-tg-button"
             placeholder="Search jobs..."
           />
         </div>
 
         {filteredJobs.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-tg-hint">No jobs available yet.</p>
-            <p className="text-tg-hint text-sm mt-2">Check back later!</p>
-          </div>
+          <EmptyState type="jobs" />
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {filteredJobs.map((job) => (
-              <button
+              <JobCard
                 key={job.id}
-                onClick={() => handleJobClick(job.id)}
-                className="w-full text-left p-4 bg-tg-secondary rounded-xl transition-transform active:scale-[0.98]"
-              >
-                <h3 className="font-semibold text-tg-text">{job.title}</h3>
-                <div className="flex items-center gap-2 mt-2 text-tg-hint text-sm">
-                  <DollarSign className="w-4 h-4" />
-                  <span>{job.budget}</span>
-                </div>
-                <p className="text-tg-hint text-sm mt-2 line-clamp-2">
-                  {job.description}
-                </p>
-                <div className="flex justify-between items-center mt-3 text-xs text-tg-hint">
-                  <span>By {job.employerName}</span>
-                  <span>Due: {job.deadline}</span>
-                </div>
-              </button>
+                job={job}
+                onApply={handleApply}
+              />
             ))}
           </div>
         )}
