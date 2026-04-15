@@ -8,15 +8,21 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#E91E63",
-        "primary-dark": "#C2185B",
-        "primary-light": "#F8BBD9",
-        background: "#F8F9FA",
-        surface: "#FFFFFF",
-        border: "#E5E7EB",
-        "text-primary": "#000000",
-        "text-secondary": "#6B7280",
-        "text-muted": "#9CA3AF",
+        brand: {
+          yellow: "#FFB800",
+          black: "#000000",
+          dark: "#121212",
+          "dark-light": "#1A1A1A",
+          gray: "#A1A1AA",
+          silver: "#E5E5E5",
+        },
+        background: "#000000",
+        surface: "#121212",
+        "surface-light": "#1A1A1A",
+        border: "#2A2A2A",
+        "text-primary": "#FFFFFF",
+        "text-secondary": "#A1A1AA",
+        "text-muted": "#71717A",
         "tg-bg": "var(--tg-theme-bg-color)",
         "tg-text": "var(--tg-theme-text-color)",
         "tg-button": "var(--tg-theme-button-color)",
@@ -26,6 +32,7 @@ module.exports = {
       },
       borderRadius: {
         "2xl": "16px",
+        "3xl": "24px",
       },
     },
   },

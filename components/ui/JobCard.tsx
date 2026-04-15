@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Building2, MapPin, Briefcase, BarChart, Clock } from "lucide-react";
+import { Building2, MapPin, Briefcase, BarChart, DollarSign, Clock } from "lucide-react";
 import { useTelegram } from "@/hooks/useTelegram";
 
 interface Job {
@@ -16,6 +16,7 @@ interface Job {
   location?: string;
   experience?: string;
   createdAt?: string;
+  isPinned?: boolean;
 }
 
 interface JobCardProps {
@@ -81,29 +82,31 @@ export function JobCard({ job, onApply }: JobCardProps) {
   };
 
   return (
-    <div className="bg-surface rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all">
+    <div className="bg-surface rounded-3xl p-6 border border-white/5 hover:border-brand-yellow/20 transition-all">
       <div className="flex items-start justify-between mb-3">
-        <h3 className="font-bold text-text-primary text-lg leading-tight">{job.title}</h3>
+        <h3 className="font-extrabold text-text-primary text-lg uppercase tracking-wide leading-tight">
+          {job.title}
+        </h3>
         {job.isPinned && (
-          <span className="px-2 py-1 bg-primary-light text-primary text-xs font-medium rounded-full">
+          <span className="px-2 py-1 bg-brand-yellow/20 text-brand-yellow text-xs font-bold rounded-full">
             Pinned
           </span>
         )}
       </div>
 
-      <div className="flex items-center gap-2 text-text-secondary text-sm mb-4">
-        <Building2 className="w-4 h-4" />
-        <span className="font-medium">{job.employerName}</span>
+      <div className="flex items-center gap-2 text-text-muted text-sm mb-4">
+        <Building2 className="w-4 h-4 text-brand-yellow" />
+        <span className="font-medium text-text-secondary">{job.employerName}</span>
         <span className="text-text-muted">•</span>
         <span className="text-text-muted">{getTimeAgo(job.createdAt)}</span>
       </div>
 
       <div className="flex flex-wrap gap-2 mb-4">
-        <span className="px-3 py-1 bg-gray-100 text-text-secondary text-xs font-medium rounded-full">
+        <span className="px-3 py-1 bg-brand-yellow/10 text-brand-yellow text-xs font-bold rounded-full border border-brand-yellow/20">
           {formatDiscipline(job.discipline)}
         </span>
         {job.jobType && (
-          <span className="px-3 py-1 bg-gray-100 text-text-secondary text-xs font-medium rounded-full">
+          <span className="px-3 py-1 bg-white/5 text-text-muted text-xs font-medium rounded-full">
             {formatJobType(job.jobType)}
           </span>
         )}
@@ -111,40 +114,40 @@ export function JobCard({ job, onApply }: JobCardProps) {
 
       <div className="flex items-center gap-4 text-text-muted text-sm mb-4">
         <div className="flex items-center gap-1">
-          <DollarSign className="w-4 h-4" />
-          <span className="font-medium text-primary">{job.budget}</span>
+          <DollarSign className="w-4 h-4 text-brand-yellow" />
+          <span className="font-bold text-brand-yellow">{job.budget}</span>
         </div>
         {job.location && (
           <div className="flex items-center gap-1">
-            <MapPin className="w-4 h-4" />
+            <MapPin className="w-4 h-4 text-brand-yellow" />
             <span>{job.location}</span>
           </div>
         )}
         {job.experience && (
           <div className="flex items-center gap-1">
-            <BarChart className="w-4 h-4" />
+            <BarChart className="w-4 h-4 text-brand-yellow" />
             <span>{job.experience}</span>
           </div>
         )}
         <div className="flex items-center gap-1">
-          <Briefcase className="w-4 h-4" />
+          <Briefcase className="w-4 h-4 text-brand-yellow" />
           <span>{formatJobType(job.jobType)}</span>
         </div>
       </div>
 
-      <p className="text-text-secondary text-sm line-clamp-2 mb-4">{job.description}</p>
+      <p className="text-text-muted text-sm line-clamp-2 mb-5">{job.description}</p>
 
       <div className="flex gap-3">
         <button
           onClick={handleViewDetails}
-          className="flex-1 py-3 border-2 border-primary text-primary rounded-xl font-bold text-sm hover:bg-primary-light transition-colors"
+          className="flex-1 py-3 border-2 border-brand-yellow text-brand-yellow rounded-2xl font-extrabold text-sm hover:bg-brand-yellow/10 transition-colors"
         >
           View Details
         </button>
         {onApply && (
           <button
             onClick={handleApply}
-            className="flex-1 py-3 bg-primary text-white rounded-xl font-bold text-sm hover:bg-primary-dark active:scale-95 transition-all"
+            className="flex-1 py-3 bg-brand-yellow text-black rounded-2xl font-extrabold text-sm hover:bg-brand-yellow/90 active:scale-95 transition-all"
           >
             Apply Now
           </button>

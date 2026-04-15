@@ -6,13 +6,13 @@ interface SkeletonProps {
 
 export function Skeleton({ className = "" }: SkeletonProps) {
   return (
-    <div className={`animate-pulse bg-gray-200 rounded ${className}`} />
+    <div className={`animate-pulse bg-white/10 rounded ${className}`} />
   );
 }
 
 export function JobCardSkeleton() {
   return (
-    <div className="bg-surface rounded-2xl p-6 border border-gray-100">
+    <div className="bg-surface rounded-3xl p-6 border border-white/5">
       <Skeleton className="h-6 w-3/4 mb-3" />
       <div className="flex items-center gap-2 mb-4">
         <Skeleton className="h-4 w-24" />
@@ -28,10 +28,10 @@ export function JobCardSkeleton() {
         <Skeleton className="h-4 w-20" />
       </div>
       <Skeleton className="h-4 w-full mb-2" />
-      <Skeleton className="h-4 w-2/3 mb-4" />
+      <Skeleton className="h-4 w-2/3 mb-5" />
       <div className="flex gap-3">
-        <Skeleton className="h-12 w-1/2 rounded-xl" />
-        <Skeleton className="h-12 w-1/2 rounded-xl" />
+        <Skeleton className="h-12 w-1/2 rounded-2xl" />
+        <Skeleton className="h-12 w-1/2 rounded-2xl" />
       </div>
     </div>
   );

@@ -140,7 +140,7 @@ export default function JobsPage() {
     return (
       <div className="min-h-screen bg-background p-6">
         <div className="max-w-md mx-auto">
-          <h1 className="text-xl font-bold text-text-primary mb-6">Browse Jobs</h1>
+          <h1 className="text-xl font-extrabold text-text-primary uppercase mb-6">Browse Jobs</h1>
           <JobFeedSkeleton />
         </div>
       </div>
@@ -151,9 +151,9 @@ export default function JobsPage() {
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-md mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl font-bold text-text-primary">Browse Jobs</h1>
+          <h1 className="text-xl font-extrabold text-text-primary uppercase">Browse Jobs</h1>
           {refreshing && (
-            <RefreshCw className="w-5 h-5 text-primary animate-spin" />
+            <RefreshCw className="w-5 h-5 text-brand-yellow animate-spin" />
           )}
         </div>
 
@@ -164,7 +164,7 @@ export default function JobsPage() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 p-3 bg-surface border border-gray-100 rounded-xl text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full pl-10 p-3 bg-surface border border-white/10 rounded-2xl text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-yellow placeholder:text-text-muted"
               placeholder="Search jobs..."
             />
           </div>
@@ -173,9 +173,9 @@ export default function JobsPage() {
               tg?.HapticFeedback?.impactOccurred("light");
               setShowFilters(true);
             }}
-            className="p-3 bg-surface border border-gray-100 rounded-xl hover:bg-gray-50 transition-colors"
+            className="p-3 bg-surface border border-white/10 rounded-2xl hover:bg-surface-light transition-colors"
           >
-            <SlidersHorizontal className="w-5 h-5 text-text-secondary" />
+            <SlidersHorizontal className="w-5 h-5 text-brand-yellow" />
           </button>
         </div>
 
